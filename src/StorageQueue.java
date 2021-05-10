@@ -8,6 +8,7 @@ public class StorageQueue<T extends Item> {
 
     public StorageQueue() {
         this.ID = "Not assigned";
+        this.itemsStored = new LinkedList<>(); // infinite size
     }
 
     public StorageQueue(String inID) {
@@ -17,8 +18,13 @@ public class StorageQueue<T extends Item> {
 
     public StorageQueue(int inMaxSize) {
         this();
-        this.itemsStored = new LimitedLinkedList<T>(inMaxSize);
+        this.itemsStored = new LimitedLinkedList<>(inMaxSize); // Limited size
+    }
 
+    public StorageQueue(String inID, int inMaxSize) {
+        this();
+        this.ID = inID;
+        this.itemsStored = new LimitedLinkedList<>(inMaxSize); // Limited size
     }
 
 
@@ -32,6 +38,7 @@ public class StorageQueue<T extends Item> {
 
 
     // Lmao, lachlan will hate this
+    // TODO(yoshi): test yo
     private class LimitedLinkedList<T> extends LinkedList<T> {
         private final int limit;
 
