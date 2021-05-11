@@ -1,5 +1,7 @@
 public class Config {
     private final static double MAX_RUN_TIME = 10000000;
+    private final static int NUM_GEN_SEED = 1;
+
     private int M;
     private int N;
     private int Qmax;

@@ -11,15 +11,6 @@ public class StorageQueue<T extends Item> {
         this.itemsStored = new LinkedList<>(); // infinite size
     }
 
-    public StorageQueue(String inID) {
-        this();
-        this.ID = inID;
-    }
-
-    public StorageQueue(int inMaxSize) {
-        this();
-        this.itemsStored = new LimitedLinkedList<>(inMaxSize); // Limited size
-    }
 
     public StorageQueue(String inID, int inMaxSize) {
         this();
@@ -34,6 +25,10 @@ public class StorageQueue<T extends Item> {
 
     public T remove() {
         return this.itemsStored.remove();
+    }
+
+    public int size() {
+        return this.itemsStored.size();
     }
 
 

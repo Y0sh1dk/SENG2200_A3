@@ -4,7 +4,7 @@ public class PA3 {
     public static void main(String[] args) {
         config = new Config();
 
-        if (args.length <= 3) { // If wrong amount of args given
+        if (args.length != 3) { // If wrong amount of args given
             System.out.println("Invalid Arguments, Example: A3 30 3 Process1.txt Process2.txt Process3.txt");
             System.exit(1); // TODO(yoshi) : what code?
         }
