@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProductionLine<T extends Item> {
@@ -5,12 +6,14 @@ public class ProductionLine<T extends Item> {
     private String finalStageID;
     private HashMap<String ,AbstractStage<T>> stages;
     private HashMap<String ,StorageQueue<T>> storageQueues;
+    private ArrayList<StageEvent> stageEvents;
 
     public static Config config;
 
     private ProductionLine() {
         this.stages = new HashMap<>();
         this.storageQueues = new HashMap<>();
+        this.stageEvents = new ArrayList<>();
     }
 
     public ProductionLine(Config inConfig) {
@@ -32,11 +35,11 @@ public class ProductionLine<T extends Item> {
         // all stages
         for (String s : stageNames) {
             if (s.equalsIgnoreCase(this.beginStageID)) {
-                this.stages.put(s, new BeginStage<T>(s));
+                this.stages.put(s, new BeginStage<T>(s, this));
             } else if (s.equalsIgnoreCase((this.finalStageID))) {
-                this.stages.put(s, new FinalStage<>(s));
+                this.stages.put(s, new FinalStage<>(s, this));
             } else {
-                this.stages.put(s, new InnerStage<>(s));
+                this.stages.put(s, new InnerStage<>(s, this));
             }
         }
 
@@ -106,5 +109,13 @@ public class ProductionLine<T extends Item> {
     // TODO(yoshi): this
     public String report() {
         return "";
+    }
+
+    /**
+     * Accept events from stages
+     * @param inEvent
+     */
+    public void AddEvent(StageEvent inEvent) {
+        this.stageEvents.add(inEvent);
     }
 }

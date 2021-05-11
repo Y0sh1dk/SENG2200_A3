@@ -5,6 +5,7 @@ public abstract class AbstractStage<T extends Item> {
     protected ArrayList<StageEvent> events;
     protected T currentItem;
     protected State state;
+    protected ProductionLine<T> productionLine; // production line this stage is apart of
 
 
     enum State {
@@ -18,14 +19,20 @@ public abstract class AbstractStage<T extends Item> {
         this.state = State.STARVED;
     }
 
-    public AbstractStage(String inID) {
+
+    public AbstractStage(String inID, AbstractStage.State inStartingState, ProductionLine<T> inPL) {
         this();
         this.ID = inID;
+        this.state = inStartingState;
+        this.productionLine = inPL;
     }
 
-    public AbstractStage(String inID, AbstractStage.State startingState) {
-        this(inID);
-        this.state = startingState;
+    /**
+     * Sent events back to the production line
+     * @param inEvent
+     */
+    protected void SendEvent(StageEvent inEvent) {
+        this.productionLine.AddEvent(inEvent);
     }
 
 

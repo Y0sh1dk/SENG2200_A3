@@ -2,8 +2,8 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
     protected StorageQueue<T> prevQueue;
     protected StorageQueue<T> nextQueue;
 
-    public InnerStage(String inID) {
-        super(inID);
+    public InnerStage(String inID, ProductionLine<T> inPL) {
+        super(inID, State.STARVED, inPL);
         this.prevQueue = new StorageQueue<>();
         this.nextQueue = new StorageQueue<>();
     }
