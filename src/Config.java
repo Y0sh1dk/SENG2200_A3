@@ -54,4 +54,12 @@ public class Config {
     public double getPreviousTime() {
         return previousTime;
     }
+
+    public int getNumGenSeed() {
+        return NUM_GEN_SEED;
+    }
+
+    public double getMaxRunTime() {
+        return MAX_RUN_TIME;
+    }
 }

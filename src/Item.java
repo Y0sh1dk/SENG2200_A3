@@ -24,4 +24,8 @@ public class Item {
     public State getState() {
         return this.state;
     }
+
+    public void setState(State inState) {
+        this.state = inState;
+    }
 }

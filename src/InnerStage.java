@@ -2,8 +2,8 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
     protected StorageQueue<T> prevQueue;
     protected StorageQueue<T> nextQueue;
 
-    public InnerStage(String inID, ProductionLine<T> inPL) {
-        super(inID, State.STARVED, inPL);
+    public InnerStage(String inID) {
+        super(inID, State.STARVED);
         this.prevQueue = new StorageQueue<>();
         this.nextQueue = new StorageQueue<>();
     }
@@ -29,9 +29,14 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
     /**
      * Push item into next queue
      */
-    protected void pushItem() {
-        this.nextQueue.add(this.currentItem);
-        this.currentItem = null;
+    //TODO(yoshi): refactor
+    protected boolean pushItem() {
+        boolean temp = this.nextQueue.add(this.currentItem);
+        if (temp) {
+            this.currentItem = null;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -46,4 +51,28 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
         return false;
     }
 
+    @Override
+    public void process() {
+        // If starved
+        if (this.state == State.STARVED) {
+            if (this.getItem()) {
+                this.state = State.PROCESSING;
+                this.currentItem.setState(Item.State.PROCESSING);
+                this.events.add(this.genEvent());
+            }
+        }
+        else if (this.state == State.PROCESSING) {
+            // if finish time is same as last event added finish time
+            if (ProductionLine.config.getCurrentTime() ==
+                    this.events.get(this.events.size()-1).getFinishTime()) {
+                // If can push current item into next queue
+                if (this.pushItem()) {
+                    this.state = State.STARVED;
+                } else {
+                    this.state = State.BLOCKED;
+                }
+            }
+        }
+
+    }
 }

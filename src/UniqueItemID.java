@@ -7,7 +7,7 @@ public class UniqueItemID {
 
     }
 
-    public String getID() {
+    public static String getID() {
         return String.valueOf(++nextUniqueID);
     }
 }

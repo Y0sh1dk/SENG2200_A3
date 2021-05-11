@@ -4,8 +4,8 @@ public class FinalStage<T extends Item> extends AbstractStage<T> {
     private StorageQueue<T> prevQueue;
     private ArrayList<T> warehouse;
 
-    public FinalStage(String inID, ProductionLine<T> inPL) {
-        super(inID, State.STARVED, inPL);
+    public FinalStage(String inID) {
+        super(inID, State.STARVED);
         this.prevQueue = new StorageQueue<>();
         this.warehouse = new ArrayList<>();
     }
@@ -19,4 +19,8 @@ public class FinalStage<T extends Item> extends AbstractStage<T> {
     }
 
 
+    @Override
+    public void process() {
+
+    }
 }

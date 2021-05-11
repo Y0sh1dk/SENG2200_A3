@@ -19,10 +19,16 @@ public class ProductionLine<T extends Item> {
     public ProductionLine(Config inConfig) {
         this();
         config = inConfig;
+        this.generateProductionLine();
     }
 
     public void run() {
-
+        while(config.getCurrentTime() < config.getMaxRunTime()) {
+            this.stages.forEach((k,v) -> {
+                v.process();
+            });
+            // todo increment time
+        }
     }
 
     public void generateProductionLine() {
@@ -35,11 +41,11 @@ public class ProductionLine<T extends Item> {
         // all stages
         for (String s : stageNames) {
             if (s.equalsIgnoreCase(this.beginStageID)) {
-                this.stages.put(s, new BeginStage<T>(s, this));
+                this.stages.put(s, new BeginStage<>(s));
             } else if (s.equalsIgnoreCase((this.finalStageID))) {
-                this.stages.put(s, new FinalStage<>(s, this));
+                this.stages.put(s, new FinalStage<>(s));
             } else {
-                this.stages.put(s, new InnerStage<>(s, this));
+                this.stages.put(s, new InnerStage<>(s));
             }
         }
 
@@ -111,11 +117,13 @@ public class ProductionLine<T extends Item> {
         return "";
     }
 
-    /**
-     * Accept events from stages
-     * @param inEvent
-     */
-    public void AddEvent(StageEvent inEvent) {
-        this.stageEvents.add(inEvent);
+    private void getEvents() {
+        // for each stage
+        this.stages.forEach((k,v) -> {
+            // for each event in single stage
+            this.stageEvents.addAll(v.getEvents());
+            //TODO(yoshi): look at this
+            //v.clearEvents();
+        });
     }
 }
