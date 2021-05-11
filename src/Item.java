@@ -20,4 +20,8 @@ public class Item {
         this();
         this.uniqueID = inID;
     }
+
+    public State getState() {
+        return this.state;
+    }
 }

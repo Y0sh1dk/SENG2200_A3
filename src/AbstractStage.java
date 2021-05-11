@@ -6,8 +6,6 @@ public abstract class AbstractStage<T extends Item> {
     protected T currentItem;
     protected State state;
 
-    protected StorageQueue<T> prevQueue;
-    protected StorageQueue<T> nextQueue;
 
     enum State {
         PROCESSING,
@@ -30,25 +28,22 @@ public abstract class AbstractStage<T extends Item> {
         this.state = startingState;
     }
 
-    /**
-     * Push item into next queue
-     */
-    protected void pushItem() {
-        this.nextQueue.add(this.currentItem);
-        this.currentItem = null;
-    }
 
-    /**
-     * get item from prev queue if item available
-     * @return true if successful, else false
-     */
-    protected boolean getItem() {
-        if (this.prevQueue.size() != 0) {
-            this.currentItem = prevQueue.remove();
-            return true;
-        }
-        return false;
-    }
+
+    //private void updateState() {
+    //    // Processing
+    //    if (this.currentItem != null && this.currentItem.getState() != Item.State.FINISHED) {
+    //        this.state = State.PROCESSING;
+    //    }
+    //    // Blocked
+    //    else if (this.currentItem != null && this.currentItem.getState() == Item.State.FINISHED) {
+    //        this.state = State.BLOCKED;
+    //    }
+    //    // Starved
+    //    else if (this.currentItem == null && this.prevQueue.size() == 0) {
+    //        this.state = State.STARVED;
+    //    }
+    //}
     
     
     
@@ -66,5 +61,11 @@ public abstract class AbstractStage<T extends Item> {
         return this.ID;
     }
 
-    abstract public StageEvent process();
+    public StageEvent process() {
+        // Currently doesnt have an item
+        if (currentItem == null) {
+
+        }
+        return null;
+    }
 }

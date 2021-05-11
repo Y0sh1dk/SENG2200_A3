@@ -6,8 +6,12 @@ public class BeginStage<T extends Item> extends AbstractStage<T> {
         this.nextQueue = new StorageQueue<>();
     }
 
-    @Override
-    public StageEvent process() {
-        return null;
+    public void setNextQueue(StorageQueue<T> inQueue) {
+        this.nextQueue = inQueue;
     }
+
+    public StorageQueue<T> getNextQueue() {
+        return this.nextQueue;
+    }
+
 }

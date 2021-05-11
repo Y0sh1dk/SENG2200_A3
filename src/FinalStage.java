@@ -10,8 +10,13 @@ public class FinalStage<T extends Item> extends AbstractStage<T> {
         this.warehouse = new ArrayList<>();
     }
 
-    @Override
-    public StageEvent process() {
-        return null;
+    public void setPrevQueue(StorageQueue<T> inQueue) {
+        this.prevQueue = inQueue;
     }
+
+    public StorageQueue<T> getPrevQueue() {
+        return this.prevQueue;
+    }
+
+
 }
