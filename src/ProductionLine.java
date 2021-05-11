@@ -6,11 +6,21 @@ public class ProductionLine<T extends Item> {
     private HashMap<String ,AbstractStage<T>> stages;
     private HashMap<String ,StorageQueue<T>> storageQueues;
 
+    public static Config config;
 
-    public ProductionLine() {
+    private ProductionLine() {
         this.stages = new HashMap<>();
+        this.storageQueues = new HashMap<>();
     }
 
+    public ProductionLine(Config inConfig) {
+        this();
+        config = inConfig;
+    }
+
+    public void run() {
+
+    }
 
     public void generateProductionLine() {
         String[] stageNames = {"S0", "S1", "S2a", "S2b", "S3", "S4a", "S4b", "S5"};
@@ -89,8 +99,12 @@ public class ProductionLine<T extends Item> {
     }
 
     private StorageQueue<T> genStorageQueue(String inQueueID) {
-        this.storageQueues.putIfAbsent(inQueueID, new StorageQueue<>(inQueueID, PA3.config.getQmax()));
+        this.storageQueues.putIfAbsent(inQueueID, new StorageQueue<>(inQueueID, config.getQmax()));
         return this.storageQueues.get(inQueueID);
     }
 
+    // TODO(yoshi): this
+    public String report() {
+        return "";
+    }
 }

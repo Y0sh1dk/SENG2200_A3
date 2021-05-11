@@ -1,8 +1,7 @@
 public class PA3 {
-    public static Config config;
 
     public static void main(String[] args) {
-        config = new Config();
+        Config config = new Config();
 
         if (args.length != 3) { // If wrong amount of args given
             System.out.println("Invalid Arguments, Example: A3 30 3 Process1.txt Process2.txt Process3.txt");
@@ -20,6 +19,9 @@ public class PA3 {
     }
 
     private void run(Config config) {
+        ProductionLine<Item> pl = new ProductionLine<>(config);
+        pl.run();
+        System.out.println(pl.report());
 
     }
 }
