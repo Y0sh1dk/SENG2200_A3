@@ -1,13 +1,17 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 
 public class StorageQueue<T extends Item> {
     private Queue<T> itemsStored;
+    private ArrayList<StorageQueueEvent> events;
     private String ID;
 
 
     public StorageQueue() {
         this.ID = "Not assigned";
+        this.events = new ArrayList<>();
         this.itemsStored = new LinkedList<>(); // infinite size
     }
 
@@ -20,12 +24,41 @@ public class StorageQueue<T extends Item> {
 
 
     public boolean add(T inItem) {
-        //System.out.println(inItem);
-        return this.itemsStored.add(inItem);
+        boolean isAdded =  this.itemsStored.add(inItem);
+        if (isAdded) {
+            this.events.add(new StorageQueueEvent(
+                    this.ID,
+                    inItem.getUniqueID(),
+                    ProductionLine.config.getCurrentTime(),
+                    StorageQueueEvent.Type.ADD));
+        } else {
+            this.events.add(new StorageQueueEvent(
+                    this.ID,
+                    inItem.getUniqueID(),
+                    ProductionLine.config.getCurrentTime(),
+                    StorageQueueEvent.Type.ADD_FAILED));
+        }
+        return isAdded;
     }
 
+    // Returns null if no such item
     public T remove() {
-        return this.itemsStored.remove();
+        try {
+            T removed = this.itemsStored.remove();
+            this.events.add(new StorageQueueEvent(
+                    this.ID,
+                    removed.getUniqueID(),
+                    ProductionLine.config.getCurrentTime(),
+                    StorageQueueEvent.Type.REMOVE));
+            return removed;
+        } catch (NoSuchElementException e) {
+            this.events.add(new StorageQueueEvent(
+                    this.ID,
+                    "",
+                    ProductionLine.config.getCurrentTime(),
+                    StorageQueueEvent.Type.REMOVE_FAILED));
+            return null;
+        }
     }
 
     public int size() {

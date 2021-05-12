@@ -1,17 +1,15 @@
 public class Config {
-    private final static double MAX_RUN_TIME = 10000;
-    private final static int NUM_GEN_SEED = 4;
+    private final static double MAX_RUN_TIME = 10000000;
+    private final static int NUM_GEN_SEED = 3453;
 
     private int M;
     private int N;
     private int Qmax;
 
     private double currentTime;
-    private double previousTime;
 
     public Config() {
         this.currentTime = 0;
-        this.previousTime = 0;
     }
 
     public void parseArgs(String[] args) throws Exception {
@@ -38,14 +36,6 @@ public class Config {
         return Qmax;
     }
 
-    public boolean incrementCurrentTime(double inTime) {
-        if (this.currentTime + inTime > MAX_RUN_TIME) {
-            return false;
-        }
-        this.previousTime = this.currentTime;
-        this.currentTime += inTime;
-        return true;
-    }
 
     public double getCurrentTime() {
         return currentTime;
@@ -53,10 +43,6 @@ public class Config {
 
     public void setCurrentTime(double inTime) {
         this.currentTime = inTime;
-    }
-
-    public double getPreviousTime() {
-        return previousTime;
     }
 
     public int getNumGenSeed() {

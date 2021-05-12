@@ -1,4 +1,6 @@
 public class ItemEvent extends AbstractEvent {
+    private String itemID;
+
 
 
 

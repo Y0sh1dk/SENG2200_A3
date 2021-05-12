@@ -5,15 +5,10 @@ public class ProductionLine<T extends Item> {
     private String finalStageID;
     private HashMap<String ,AbstractStage<T>> stages;
     private HashMap<String ,StorageQueue<T>> storageQueues;
-    private ArrayList<StageEvent> pendingStageEvents;
-    private ArrayList<StageEvent> finishedStageEvents;
+    private ArrayList<Double> pendingFinishTimes;
 
-
-
-
-    public static Random r = new Random(1);
-
-
+    //TODO(yoshi): change
+    public static Random r = new Random();
 
 
     public static Config config;
@@ -21,8 +16,7 @@ public class ProductionLine<T extends Item> {
     private ProductionLine() {
         this.stages = new HashMap<>();
         this.storageQueues = new HashMap<>();
-        this.pendingStageEvents = new ArrayList<>();
-        this.finishedStageEvents = new ArrayList<>();
+        this.pendingFinishTimes = new ArrayList<>();
     }
 
     public ProductionLine(Config inConfig) {
@@ -33,43 +27,45 @@ public class ProductionLine<T extends Item> {
 
     public void run() {
         while(config.getCurrentTime() < config.getMaxRunTime()) {
+            boolean eventOccured = true;
             System.out.println(config.getCurrentTime());
-            this.stages.forEach((k,v) -> {
-                v.process();
-            });
-            this.moveFinishedEvents();
-            this.getEvents();
-            pendingStageEvents.sort(new StageEvent.finishTimeComparator());
-            try {
-                config.setCurrentTime(pendingStageEvents.get(0).getFinishTime());
-            } catch (Exception e) {
-                System.out.println(e);
+            while(eventOccured) {
+                eventOccured = false;
+
+                for (AbstractStage<T> s : this.stages.values()) {
+                    Double finishTime = s.process();
+                    if (finishTime != null) {
+                        eventOccured = true;
+                        this.pendingFinishTimes.add(finishTime);
+                    }
+                }
             }
+
+            this.clearFinishedTimes();
+            Collections.sort(this.pendingFinishTimes);
+            config.setCurrentTime(pendingFinishTimes.get(0));
+
+
+            //try {
+            //    config.setCurrentTime(pendingFinishTimes.get(0));
+            //    if (config.getCurrentTime() == 154570.48146887787) {
+            //        System.out.println("test");
+            //    }
+            //} catch (Exception e) {
+            //    System.out.println(e);
+            //}
+
         }
+        // FINISHED
         this.stages.forEach((v, k) -> {
             System.out.println(v + ": " + k.numProcessed);
         });
     }
 
-
-    private void moveFinishedEvents() {
-        ListIterator<StageEvent> iter = this.pendingStageEvents.listIterator();
-        while(iter.hasNext()) {
-            StageEvent stageEvent = iter.next();
-            if(stageEvent.isFinished()) {
-                this.finishedStageEvents.add(stageEvent);
-                iter.remove();
-            }
-        }
-
-
-        //this.pendingStageEvents.forEach((stageEvent ->  {
-        //    if(stageEvent.isFinished()) {
-        //        this.finishedStageEvents.add(stageEvent);
-        //        pendingStageEvents.remove(stageEvent);
-        //    }
-        //}));
+    private void clearFinishedTimes() {
+        this.pendingFinishTimes.removeIf((aDouble) -> aDouble <= config.getCurrentTime());
     }
+
 
     public void generateProductionLine() {
         String[] stageNames = {"S0", "S1", "S2a", "S2b", "S3", "S4a", "S4b", "S5"};
@@ -161,16 +157,4 @@ public class ProductionLine<T extends Item> {
         return "";
     }
 
-    private void getEvents() {
-        // for each stage
-        this.stages.forEach((k,v) -> {
-            // for each event in single stage
-            if (v.isEventAvailable()) {
-                this.pendingStageEvents.add(v.getEvent());
-            }
-
-            //TODO(yoshi): look at this
-            //v.clearEvents();
-        });
-    }
 }

@@ -3,32 +3,17 @@ import java.util.Random;
 
 public abstract class AbstractStage<T extends Item> {
     private String ID;
-    protected StageEvent currentEvent;
+    protected int numProcessed;
     protected boolean isEventAvailable;
     protected T currentItem;
     protected State state;
 
     protected double multiplier;
 
-    public int numProcessed;
-
     public void setMultiplier(double inMulti) {
         this.multiplier = inMulti;
     }
 
-
-
-    public StageEvent getEvent() {
-        if (this.isEventAvailable) {
-            this.isEventAvailable = false;
-            return this.currentEvent;
-        }
-        return null;
-    }
-
-    public boolean isEventAvailable() {
-        return this.isEventAvailable;
-    }
 
 
     enum State {
@@ -38,7 +23,6 @@ public abstract class AbstractStage<T extends Item> {
     }
 
     private AbstractStage() {
-        //this.events = new ArrayList<>();
         this.state = State.STARVED;
         this.isEventAvailable = false;
         this.multiplier = 1;
@@ -51,21 +35,10 @@ public abstract class AbstractStage<T extends Item> {
         this.state = inStartingState;
     }
 
-    public abstract void process();
+    public abstract Double process();
 
 
-    //TODO(yoshi): needs to be different for double stages?
-    protected StageEvent genEvent() {
-        this.isEventAvailable = true;
-        StageEvent event = new StageEvent();
-        event.setStageID(this.ID);
-        event.setStartTime(ProductionLine.config.getCurrentTime());
-        event.setFinishTime(event.getStartTime() + this.calProcessingTime());
-        event.setItemID(currentItem.getUniqueID());
-        return event;
-    }
-
-    private double calProcessingTime() {
+    protected double calProcessingTime() {
         //Random r = new Random(ProductionLine.config.getNumGenSeed());
         double d = ((ProductionLine.config.getM()*multiplier) +
                 (ProductionLine.config.getN()*multiplier) * (ProductionLine.r.nextDouble() - 0.5));

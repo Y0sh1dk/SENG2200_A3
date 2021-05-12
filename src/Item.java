@@ -5,8 +5,18 @@ public class Item {
     private ArrayList<ItemEvent> events;
     private State state;
 
+    private Double finishTime;
+
     public String getUniqueID() {
         return uniqueID;
+    }
+
+    public Double getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Double finishTime) {
+        this.finishTime = finishTime;
     }
 
 
