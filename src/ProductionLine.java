@@ -6,10 +6,7 @@ public class ProductionLine<T extends Item> {
     private HashMap<String ,AbstractStage<T>> stages;
     private HashMap<String ,StorageQueue<T>> storageQueues;
     private ArrayList<Double> pendingFinishTimes;
-
-    //TODO(yoshi): change
-    public static Random r = new Random();
-
+    private static Random randomInst = null;
 
     public static Config config;
 
@@ -22,39 +19,27 @@ public class ProductionLine<T extends Item> {
     public ProductionLine(Config inConfig) {
         this();
         config = inConfig;
+        randomInst = new Random(config.getNumGenSeed());
         this.generateProductionLine();
     }
 
     public void run() {
         while(config.getCurrentTime() < config.getMaxRunTime()) {
             boolean eventOccured = true;
-            System.out.println(config.getCurrentTime());
             while(eventOccured) {
                 eventOccured = false;
 
                 for (AbstractStage<T> s : this.stages.values()) {
                     Double finishTime = s.process();
-                    if (finishTime != null) {
+                    if (finishTime != 0) {
                         eventOccured = true;
                         this.pendingFinishTimes.add(finishTime);
                     }
                 }
             }
-
             this.clearFinishedTimes();
             Collections.sort(this.pendingFinishTimes);
             config.setCurrentTime(pendingFinishTimes.get(0));
-
-
-            //try {
-            //    config.setCurrentTime(pendingFinishTimes.get(0));
-            //    if (config.getCurrentTime() == 154570.48146887787) {
-            //        System.out.println("test");
-            //    }
-            //} catch (Exception e) {
-            //    System.out.println(e);
-            //}
-
         }
         // FINISHED
         this.stages.forEach((v, k) -> {
@@ -157,4 +142,7 @@ public class ProductionLine<T extends Item> {
         return "";
     }
 
+    public static Random getRandomInst() {
+        return randomInst;
+    }
 }

@@ -25,12 +25,12 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
     }
 
 
-
     /**
      * Push item into next queue
      */
-    //TODO(yoshi): refactor
-    private boolean pushItem() {
+    //TODO(yoshi): use a decorator for incrementing??
+    @Override
+    protected boolean pushItem() {
         boolean temp = this.nextQueue.add(this.currentItem);
         if (temp) {
             this.numProcessed++;
@@ -44,72 +44,11 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
      * get item from prev queue if item available and sets state
      * @return true if successful, else false
      */
+    @Override
     protected boolean getItem() {
         this.currentItem = prevQueue.remove();
         return this.currentItem != null;
     }
 
 
-    // TODO(yoshi): can refactor out into abstract class and get implement getItem() and pushItem() in concrete classes
-    @Override
-    public Double process() {
-        // If starved
-        switch(this.state) {
-            case STARVED:
-                if (this.getItem()) {
-                    currentItem.setFinishTime(ProductionLine.config.getCurrentTime() + this.calProcessingTime());
-                    this.state = State.PROCESSING;
-                    return currentItem.getFinishTime();
-                }
-                break;
-            case PROCESSING:
-                if (ProductionLine.config.getCurrentTime() == this.currentItem.getFinishTime()) {
-                    // we are finished
-                    if (this.pushItem()) {
-                        this.state = State.STARVED;
-                    } else {
-                        this.state = State.BLOCKED;
-                    }
-                }
-                break;
-            case BLOCKED:
-                if (this.pushItem()) {
-                    this.state = State.STARVED;
-                } else {
-                    this.state = State.BLOCKED;
-                }
-                break;
-        }
-        return null;
-    }
-
-
-    //@Override
-    //public StageEvent process() {
-    //    // If starved
-    //    if (this.state == State.STARVED) {
-    //        if (this.getItem()) {
-    //            numProcessed++;
-    //            //System.out.println(this.getID() + ": got" + this.currentItem.getUniqueID());
-    //            this.state = State.PROCESSING;
-    //            this.currentItem.setState(Item.State.PROCESSING);
-    //            this.currentEvent = this.genEvent();
-    //            return currentEvent;
-    //        }
-    //    }
-    //    else if (this.state == State.PROCESSING || this.state == State.BLOCKED) {
-    //        // if finish time is same as last event added finish time
-    //        if (ProductionLine.config.getCurrentTime() ==
-    //                currentEvent.getFinishTime()) {
-    //            this.currentEvent.setFinished(true);
-    //            // If can push current item into next queue
-    //            if (this.pushItem()) {
-    //                this.state = State.STARVED;
-    //            } else {
-    //                this.state = State.BLOCKED;
-    //            }
-    //        }
-    //    }
-    //    return null;
-    //}
 }

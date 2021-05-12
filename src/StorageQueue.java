@@ -65,9 +65,6 @@ public class StorageQueue<T extends Item> {
         return this.itemsStored.size();
     }
 
-
-    // Lmao, lachlan will hate this
-    // TODO(yoshi): test yo
     private class LimitedLinkedList<T> extends LinkedList<T> {
         private final int limit;
 
@@ -83,6 +80,6 @@ public class StorageQueue<T extends Item> {
             super.add(o);
             return true;
         }
-
     }
+
 }

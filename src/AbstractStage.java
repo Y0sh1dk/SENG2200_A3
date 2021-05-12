@@ -7,14 +7,7 @@ public abstract class AbstractStage<T extends Item> {
     protected boolean isEventAvailable;
     protected T currentItem;
     protected State state;
-
     protected double multiplier;
-
-    public void setMultiplier(double inMulti) {
-        this.multiplier = inMulti;
-    }
-
-
 
     enum State {
         PROCESSING,
@@ -35,21 +28,50 @@ public abstract class AbstractStage<T extends Item> {
         this.state = inStartingState;
     }
 
-    public abstract Double process();
+    // If got a object, returns its finish time
+    // If pushed a object, returns a -1 TODO(yoshi) make this a static class attribute
+    // if got blocked, returns null;
+    protected Double process() {
+        // If starved
+        switch(this.state) {
+            case STARVED:
+                if (this.getItem()) {
+                    currentItem.setFinishTime(ProductionLine.config.getCurrentTime() + this.calProcessingTime());
+                    this.state = State.PROCESSING;
+                    return currentItem.getFinishTime();
+                }
+                break;
+            case PROCESSING:
+                if (ProductionLine.config.getCurrentTime() == this.currentItem.getFinishTime()) {
+                    // we are finished
+                    if (this.pushItem()) {
+                        this.state = State.STARVED;
+                        return (double) -1;
+                    } else {
+                        this.state = State.BLOCKED;
+                    }
+                }
+                break;
+            case BLOCKED:
+                if (this.pushItem()) {
+                    this.state = State.STARVED;
+                    return (double) -1;
+                } else {
+                    this.state = State.BLOCKED;
+                }
+                break;
+        }
+        return (double) 0;
+    }
+
+    protected abstract boolean pushItem();
+
+    protected abstract boolean getItem();
 
 
     protected double calProcessingTime() {
-        //Random r = new Random(ProductionLine.config.getNumGenSeed());
-        double d = ((ProductionLine.config.getM()*multiplier) +
-                (ProductionLine.config.getN()*multiplier) * (ProductionLine.r.nextDouble() - 0.5));
-        //System.out.println(d);
-        return d;
-    }
-
-
-
-    public void setState(State state) {
-        this.state = state;
+        return ((ProductionLine.config.getM()*multiplier) +
+                (ProductionLine.config.getN()*multiplier) * (ProductionLine.getRandomInst().nextDouble() - 0.5));
     }
 
     public State getState() {
@@ -58,5 +80,9 @@ public abstract class AbstractStage<T extends Item> {
 
     public String getID() {
         return this.ID;
+    }
+
+    public void setMultiplier(double inMulti) {
+        this.multiplier = inMulti;
     }
 }
