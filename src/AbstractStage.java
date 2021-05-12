@@ -3,17 +3,31 @@ import java.util.Random;
 
 public abstract class AbstractStage<T extends Item> {
     private String ID;
-    protected ArrayList<StageEvent> events;
+    protected StageEvent currentEvent;
+    protected boolean isEventAvailable;
     protected T currentItem;
     protected State state;
-    //protected ProductionLine<T> productionLine; // production line this stage is apart of
 
-    public ArrayList<StageEvent> getEvents() {
-        return this.events;
+    protected double multiplier;
+
+    public int numProcessed;
+
+    public void setMultiplier(double inMulti) {
+        this.multiplier = inMulti;
     }
 
-    public void clearEvents() {
-        this.events.clear();
+
+
+    public StageEvent getEvent() {
+        if (this.isEventAvailable) {
+            this.isEventAvailable = false;
+            return this.currentEvent;
+        }
+        return null;
+    }
+
+    public boolean isEventAvailable() {
+        return this.isEventAvailable;
     }
 
 
@@ -24,8 +38,10 @@ public abstract class AbstractStage<T extends Item> {
     }
 
     private AbstractStage() {
-        this.events = new ArrayList<>();
+        //this.events = new ArrayList<>();
         this.state = State.STARVED;
+        this.isEventAvailable = false;
+        this.multiplier = 1;
     }
 
 
@@ -40,38 +56,24 @@ public abstract class AbstractStage<T extends Item> {
 
     //TODO(yoshi): needs to be different for double stages?
     protected StageEvent genEvent() {
+        this.isEventAvailable = true;
         StageEvent event = new StageEvent();
         event.setStageID(this.ID);
         event.setStartTime(ProductionLine.config.getCurrentTime());
         event.setFinishTime(event.getStartTime() + this.calProcessingTime());
+        event.setItemID(currentItem.getUniqueID());
         return event;
     }
 
     private double calProcessingTime() {
-        Random r = new Random(ProductionLine.config.getNumGenSeed());
-        return ProductionLine.config.getM() + ProductionLine.config.getN() * (r.nextDouble() - 0.5);
+        //Random r = new Random(ProductionLine.config.getNumGenSeed());
+        double d = ((ProductionLine.config.getM()*multiplier) +
+                (ProductionLine.config.getN()*multiplier) * (ProductionLine.r.nextDouble() - 0.5));
+        //System.out.println(d);
+        return d;
     }
 
 
-
-    //private void updateState() {
-    //    // Processing
-    //    if (this.currentItem != null && this.currentItem.getState() != Item.State.FINISHED) {
-    //        this.state = State.PROCESSING;
-    //    }
-    //    // Blocked
-    //    else if (this.currentItem != null && this.currentItem.getState() == Item.State.FINISHED) {
-    //        this.state = State.BLOCKED;
-    //    }
-    //    // Starved
-    //    else if (this.currentItem == null && this.prevQueue.size() == 0) {
-    //        this.state = State.STARVED;
-    //    }
-    //}
-    
-    
-    
-    
 
     public void setState(State state) {
         this.state = state;

@@ -30,7 +30,7 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
      * Push item into next queue
      */
     //TODO(yoshi): refactor
-    protected boolean pushItem() {
+    private boolean pushItem() {
         boolean temp = this.nextQueue.add(this.currentItem);
         if (temp) {
             this.currentItem = null;
@@ -56,15 +56,18 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
         // If starved
         if (this.state == State.STARVED) {
             if (this.getItem()) {
+                numProcessed++;
+                //System.out.println(this.getID() + ": got" + this.currentItem.getUniqueID());
                 this.state = State.PROCESSING;
                 this.currentItem.setState(Item.State.PROCESSING);
-                this.events.add(this.genEvent());
+                this.currentEvent = this.genEvent();
             }
         }
-        else if (this.state == State.PROCESSING) {
+        else if (this.state == State.PROCESSING || this.state == State.BLOCKED) {
             // if finish time is same as last event added finish time
             if (ProductionLine.config.getCurrentTime() ==
-                    this.events.get(this.events.size()-1).getFinishTime()) {
+                    currentEvent.getFinishTime()) {
+                this.currentEvent.setFinished(true);
                 // If can push current item into next queue
                 if (this.pushItem()) {
                     this.state = State.STARVED;

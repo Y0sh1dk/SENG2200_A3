@@ -1,7 +1,11 @@
-public class StageEvent extends AbstractEvent {
+import java.util.Comparator;
+
+public class StageEvent {
     private String stageID;
+    private String itemID;
     private double startTime;
     private double finishTime;
+    private boolean isFinished;
 
     public StageEvent() {
 
@@ -31,8 +35,28 @@ public class StageEvent extends AbstractEvent {
         this.stageID = stageID;
     }
 
-    @Override
-    public int compareTo(AbstractEvent abstractEvent) {
-        return 0;
+    public String getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public static class finishTimeComparator implements Comparator<StageEvent> {
+        @Override
+        public int compare(StageEvent o1, StageEvent o2) {
+            return Double.compare(o1.getFinishTime(), o2.getFinishTime());
+        }
     }
 }
+
+

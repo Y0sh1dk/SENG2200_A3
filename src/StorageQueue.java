@@ -20,6 +20,7 @@ public class StorageQueue<T extends Item> {
 
 
     public boolean add(T inItem) {
+        //System.out.println(inItem);
         return this.itemsStored.add(inItem);
     }
 

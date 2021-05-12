@@ -5,6 +5,11 @@ public class Item {
     private ArrayList<ItemEvent> events;
     private State state;
 
+    public String getUniqueID() {
+        return uniqueID;
+    }
+
+
     enum State{
         PROCESSING,
         QUEUED,

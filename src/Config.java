@@ -1,6 +1,6 @@
 public class Config {
-    private final static double MAX_RUN_TIME = 10000000;
-    private final static int NUM_GEN_SEED = 1;
+    private final static double MAX_RUN_TIME = 10000;
+    private final static int NUM_GEN_SEED = 4;
 
     private int M;
     private int N;
@@ -49,6 +49,10 @@ public class Config {
 
     public double getCurrentTime() {
         return currentTime;
+    }
+
+    public void setCurrentTime(double inTime) {
+        this.currentTime = inTime;
     }
 
     public double getPreviousTime() {
