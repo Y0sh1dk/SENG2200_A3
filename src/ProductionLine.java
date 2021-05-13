@@ -136,16 +136,93 @@ public class ProductionLine<T extends Item> {
     // TODO(yoshi): this
     public String report() {
         StringBuilder sb = new StringBuilder();
-        this.stages.forEach((v, k) -> {
-            sb.append(v).append(": ").append(k.numProcessed).append("\n");
-        });
-        sb.append("\n\n");
-        this.storageQueues.forEach((v, k) -> {
-            k.getEvents().forEach((storageQueueEvent -> {
-                sb.append(storageQueueEvent).append("\n");
-            }));
-        });
+        sb.append(config);
+        sb.append("\n");
+        sb.append(this.prodStationsReport());
+        sb.append("\n");
+        sb.append(this.storageQueuesReport());
+        sb.append("\n");
+        sb.append(this.prodPathsReport());
 
+        //this.stages.forEach((v, k) -> {
+        //    sb.append(v).append(": ").append(k.numProcessed).append("\n");
+        //});
+        //sb.append("\n\n");
+        //this.storageQueues.forEach((v, k) -> {
+        //    k.getEvents().forEach((storageQueueEvent -> {
+        //        sb.append(storageQueueEvent).append("\n");
+        //    }));
+        //});
+        return sb.toString();
+    }
+
+    private String prodStationsReport() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Production Stations:\n");
+        sb.append("--------------------------------------------");
+
+        return sb.toString();
+    }
+
+    private String storageQueuesReport() {
+
+        HashMap<String, Double> averageQueueTimes = new HashMap<>();
+
+        // For each queue
+        for (StorageQueue<T> queue : this.storageQueues.values()) {
+
+            // ArrayList of times items spent in the queue
+            ArrayList<Double> inQueueTimes = new ArrayList<>();
+
+            // Get HashMap of events
+            HashMap<String, ArrayList<StorageQueueEvent>> allItemEvents = queue.getEvents();
+
+            // Remove "" events (generated when stage tries to get item from empty queue
+            allItemEvents.remove("");
+
+            // For all the events for each item in that queue
+            for (ArrayList<StorageQueueEvent> itemEvents : allItemEvents.values()) {
+
+                // Sort events by time for that itemID
+                itemEvents.sort(Comparator.comparing(StorageQueueEvent::getTime));
+
+                // For each event for specific item
+                Double inTime = null;
+                Double outTime = null;
+                for (StorageQueueEvent itemEvent : itemEvents) {
+                    // If added
+                    if (itemEvent.getType() == StorageQueueEvent.Type.ADD) {
+                        inTime = itemEvent.getTime();
+                    }
+                    // If removed
+                    if (itemEvent.getType() == StorageQueueEvent.Type.REMOVE) {
+                        outTime = itemEvent.getTime();
+                    }
+                }
+                // If item entered AND exited
+                if (inTime != null && outTime != null) {
+                    inQueueTimes.add(outTime - inTime);
+                }
+            }
+            double average = inQueueTimes.stream().mapToDouble(Double::doubleValue).sum() / inQueueTimes.size();
+            averageQueueTimes.put(queue.getID(), average);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Storage Queues:\n");
+        sb.append("------------------------------\n");
+        sb.append(String.format("%-9s %-22s %-9s", "Store", "AvgTime[t]", "AvgItems\n"));
+        for(Map.Entry<String, Double> entry : averageQueueTimes.entrySet()) {
+            sb.append(String.format("%-9s %-22s %-9s\n", entry.getKey(), entry.getValue(), "brr"));
+        }
+
+        return sb.toString();
+    }
+
+    private String prodPathsReport() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Production Paths:\n");
+        sb.append("------------------");
 
         return sb.toString();
     }

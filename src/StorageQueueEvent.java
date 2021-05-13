@@ -18,7 +18,7 @@ public class StorageQueueEvent extends AbstractEvent{
         this.type = inType;
     }
 
-    public String getStorageQueueID() {
+    public String getID() {
         return this.storageQueueID;
     }
 

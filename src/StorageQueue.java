@@ -1,17 +1,16 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Queue;
+import java.util.*;
 
 public class StorageQueue<T extends Item> {
     private Queue<T> itemsStored;
     private ArrayList<StorageQueueEvent> events;
+    private HashMap<String, ArrayList<StorageQueueEvent>> hashEvents;
     private String ID;
 
 
     public StorageQueue() {
         this.ID = "Not assigned";
         this.events = new ArrayList<>();
+        this.hashEvents = new HashMap<>();
         this.itemsStored = new LinkedList<>(); // infinite size
     }
 
@@ -22,24 +21,16 @@ public class StorageQueue<T extends Item> {
         this.itemsStored = new LimitedLinkedList<>(inMaxSize); // Limited size
     }
 
-    public ArrayList<StorageQueueEvent> getEvents() {
-        return events;
+    public HashMap<String, ArrayList<StorageQueueEvent>> getEvents() {
+        return hashEvents;
     }
 
     public boolean add(T inItem) {
         boolean isAdded =  this.itemsStored.add(inItem);
         if (isAdded) {
-            this.events.add(new StorageQueueEvent(
-                    this.ID,
-                    inItem.getUniqueID(),
-                    ProductionLine.config.getCurrentTime(),
-                    StorageQueueEvent.Type.ADD));
+            this.generateEvent(inItem.getUniqueID(), StorageQueueEvent.Type.ADD);
         } else {
-            this.events.add(new StorageQueueEvent(
-                    this.ID,
-                    inItem.getUniqueID(),
-                    ProductionLine.config.getCurrentTime(),
-                    StorageQueueEvent.Type.ADD_FAILED));
+            this.generateEvent(inItem.getUniqueID(), StorageQueueEvent.Type.ADD_FAILED);
         }
         return isAdded;
     }
@@ -48,20 +39,30 @@ public class StorageQueue<T extends Item> {
     public T remove() {
         try {
             T removed = this.itemsStored.remove();
-            this.events.add(new StorageQueueEvent(
-                    this.ID,
-                    removed.getUniqueID(),
-                    ProductionLine.config.getCurrentTime(),
-                    StorageQueueEvent.Type.REMOVE));
+            this.generateEvent(removed.getUniqueID(), StorageQueueEvent.Type.REMOVE);
             return removed;
         } catch (NoSuchElementException e) {
-            this.events.add(new StorageQueueEvent(
-                    this.ID,
-                    "",
-                    ProductionLine.config.getCurrentTime(),
-                    StorageQueueEvent.Type.REMOVE_FAILED));
+            this.generateEvent("", StorageQueueEvent.Type.REMOVE_FAILED);
             return null;
         }
+    }
+
+
+    private void generateEvent(String itemID, StorageQueueEvent.Type inType) {
+        // If new item, create arrayList for it
+        if (!this.hashEvents.containsKey(itemID)) {
+            this.hashEvents.put(itemID, new ArrayList<>());
+        }
+        this.hashEvents.get(itemID).add(new StorageQueueEvent(
+                this.ID,
+                itemID,
+                ProductionLine.config.getCurrentTime(),
+                inType)
+        );
+    }
+
+    public String getID() {
+        return ID;
     }
 
     public int size() {
