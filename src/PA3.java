@@ -25,6 +25,7 @@ public class PA3 {
     private void run(Config config) {
         ProductionLine<Item> pl = new ProductionLine<>(config);
         pl.run();
+        System.out.println(config);
         System.out.println(pl.report());
 
     }

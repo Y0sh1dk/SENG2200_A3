@@ -52,4 +52,15 @@ public class Config {
     public double getMaxRunTime() {
         return MAX_RUN_TIME;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Config{");
+        sb.append("M=").append(M);
+        sb.append(", N=").append(N);
+        sb.append(", Qmax=").append(Qmax);
+        sb.append(", currentTime=").append(currentTime);
+        sb.append('}');
+        return sb.toString();
+    }
 }

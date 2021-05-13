@@ -18,6 +18,33 @@ public class StorageQueueEvent extends AbstractEvent{
         this.type = inType;
     }
 
+    public String getStorageQueueID() {
+        return this.storageQueueID;
+    }
+
+    public String getItemID() {
+        return this.itemID;
+    }
+
+    public Type getType() {
+        return this.type;
+    }
+
+    public double getTime() {
+        return time;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StorageQueueEvent{");
+        sb.append("storageQueueID='").append(storageQueueID).append('\'');
+        sb.append(", itemID='").append(itemID).append('\'');
+        sb.append(", type=").append(type);
+        sb.append(", time=").append(time);
+        sb.append('}');
+        return sb.toString();
+    }
+
     @Override
     public int compareTo(AbstractEvent abstractEvent) {
         return 0;

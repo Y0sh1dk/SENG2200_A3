@@ -43,4 +43,15 @@ public class Item {
     public void setState(State inState) {
         this.state = inState;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Item{");
+        sb.append("uniqueID='").append(uniqueID).append('\'');
+        sb.append(", events=").append(events);
+        sb.append(", state=").append(state);
+        sb.append(", finishTime=").append(finishTime);
+        sb.append('}');
+        return sb.toString();
+    }
 }

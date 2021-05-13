@@ -30,9 +30,8 @@ public abstract class AbstractStage<T extends Item> {
 
     // If got a object, returns its finish time
     // If pushed a object, returns a -1 TODO(yoshi) make this a static class attribute
-    // if got blocked, returns null;
+    // if got blocked, returns 0
     protected Double process() {
-        // If starved
         switch(this.state) {
             case STARVED:
                 if (this.getItem()) {
@@ -84,5 +83,18 @@ public abstract class AbstractStage<T extends Item> {
 
     public void setMultiplier(double inMulti) {
         this.multiplier = inMulti;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AbstractStage{");
+        sb.append("ID='").append(ID).append('\'');
+        sb.append(", numProcessed=").append(numProcessed);
+        sb.append(", isEventAvailable=").append(isEventAvailable);
+        sb.append(", currentItem=").append(currentItem);
+        sb.append(", state=").append(state);
+        sb.append(", multiplier=").append(multiplier);
+        sb.append('}');
+        return sb.toString();
     }
 }

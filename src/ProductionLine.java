@@ -3,11 +3,11 @@ import java.util.*;
 public class ProductionLine<T extends Item> {
     private String beginStageID;
     private String finalStageID;
-    private HashMap<String ,AbstractStage<T>> stages;
-    private HashMap<String ,StorageQueue<T>> storageQueues;
-    private ArrayList<Double> pendingFinishTimes;
-    private static Random randomInst = null;
+    private final HashMap<String ,AbstractStage<T>> stages;
+    private final HashMap<String ,StorageQueue<T>> storageQueues;
+    private final ArrayList<Double> pendingFinishTimes;
 
+    private static Random randomInst = null;
     public static Config config;
 
     private ProductionLine() {
@@ -25,14 +25,14 @@ public class ProductionLine<T extends Item> {
 
     public void run() {
         while(config.getCurrentTime() < config.getMaxRunTime()) {
-            boolean eventOccured = true;
-            while(eventOccured) {
-                eventOccured = false;
+            boolean eventOccurred = true;
+            while(eventOccurred) {
+                eventOccurred = false;
 
                 for (AbstractStage<T> s : this.stages.values()) {
                     Double finishTime = s.process();
                     if (finishTime != 0) {
-                        eventOccured = true;
+                        eventOccurred = true;
                         this.pendingFinishTimes.add(finishTime);
                     }
                 }
@@ -41,10 +41,6 @@ public class ProductionLine<T extends Item> {
             Collections.sort(this.pendingFinishTimes);
             config.setCurrentTime(pendingFinishTimes.get(0));
         }
-        // FINISHED
-        this.stages.forEach((v, k) -> {
-            System.out.println(v + ": " + k.numProcessed);
-        });
     }
 
     private void clearFinishedTimes() {
@@ -139,7 +135,19 @@ public class ProductionLine<T extends Item> {
 
     // TODO(yoshi): this
     public String report() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        this.stages.forEach((v, k) -> {
+            sb.append(v).append(": ").append(k.numProcessed).append("\n");
+        });
+        sb.append("\n\n");
+        this.storageQueues.forEach((v, k) -> {
+            k.getEvents().forEach((storageQueueEvent -> {
+                sb.append(storageQueueEvent).append("\n");
+            }));
+        });
+
+
+        return sb.toString();
     }
 
     public static Random getRandomInst() {

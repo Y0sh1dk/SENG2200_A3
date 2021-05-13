@@ -22,6 +22,9 @@ public class StorageQueue<T extends Item> {
         this.itemsStored = new LimitedLinkedList<>(inMaxSize); // Limited size
     }
 
+    public ArrayList<StorageQueueEvent> getEvents() {
+        return events;
+    }
 
     public boolean add(T inItem) {
         boolean isAdded =  this.itemsStored.add(inItem);
@@ -65,7 +68,7 @@ public class StorageQueue<T extends Item> {
         return this.itemsStored.size();
     }
 
-    private class LimitedLinkedList<T> extends LinkedList<T> {
+    private static class LimitedLinkedList<T> extends LinkedList<T> {
         private final int limit;
 
         public LimitedLinkedList(int inLimit) {
@@ -82,4 +85,13 @@ public class StorageQueue<T extends Item> {
         }
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StorageQueue{");
+        sb.append("itemsStored=").append(itemsStored);
+        sb.append(", events=").append(events);
+        sb.append(", ID='").append(ID).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
