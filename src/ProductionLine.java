@@ -220,10 +220,33 @@ public class ProductionLine<T extends Item> {
     }
 
     private String prodPathsReport() {
+        // ONLY CONSIDERS ITEMS THAT HAVE FINISHED PRODUCTION!!!
+        ArrayList<T> finishedItems = getFinalStage().getWarehouse();
+
+        HashMap<String, Integer> itemPathCounts = new HashMap<>();
+        itemPathCounts.put("S2a -> S4a", 0);
+        itemPathCounts.put("S2a -> S4b", 0);
+        itemPathCounts.put("S2b -> S4a", 0);
+        itemPathCounts.put("S2b -> S4b", 0);
+
+        // For all finished items
+        for (T item : finishedItems) {
+            // For all possible paths
+            for (String path : itemPathCounts.keySet()) {
+                // If contains both stages for that path
+                if (item.getItemPath().containsAll(Arrays.asList(path.split(" -> ", 2)))) {
+                    // Increment counter
+                    itemPathCounts.put(path, itemPathCounts.get(path) + 1);
+                }
+            }
+        }
+
         StringBuilder sb = new StringBuilder();
         sb.append("Production Paths:\n");
-        sb.append("------------------");
-
+        sb.append("------------------\n");
+        for (Map.Entry<String, Integer> entry: itemPathCounts.entrySet()) {
+            sb.append(entry.getKey()).append(":  ").append(entry.getValue()).append("\n");
+        }
         return sb.toString();
     }
 

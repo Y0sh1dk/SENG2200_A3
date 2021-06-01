@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.Random;
 
 public abstract class AbstractStage<T extends Item> {
     private String ID;
@@ -37,6 +35,7 @@ public abstract class AbstractStage<T extends Item> {
                 if (this.getItem()) {
                     currentItem.setFinishTime(ProductionLine.config.getCurrentTime() + this.calProcessingTime());
                     this.state = State.PROCESSING;
+                    currentItem.getItemPath().add(this.ID);
                     return currentItem.getFinishTime();
                 }
                 break;
