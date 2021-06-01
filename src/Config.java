@@ -1,5 +1,5 @@
 public class Config {
-    private final static double MAX_RUN_TIME = 10000000;
+    private final static double MAX_RUN_TIME = 10000000; // 7 zeros
     private final static int NUM_GEN_SEED = 3453;
 
     private int M;

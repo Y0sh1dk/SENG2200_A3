@@ -47,7 +47,6 @@ public class ProductionLine<T extends Item> {
         this.pendingFinishTimes.removeIf((aDouble) -> aDouble <= config.getCurrentTime());
     }
 
-
     public void generateProductionLine() {
         String[] stageNames = {"S0", "S1", "S2a", "S2b", "S3", "S4a", "S4b", "S5"};
 
@@ -138,11 +137,20 @@ public class ProductionLine<T extends Item> {
         StringBuilder sb = new StringBuilder();
         sb.append(config);
         sb.append("\n");
+        sb.append("\n");
+        sb.append(this.summaryReport());
+        sb.append("\n");
         sb.append(this.prodStationsReport());
         sb.append("\n");
         sb.append(this.storageQueuesReport());
         sb.append("\n");
         sb.append(this.prodPathsReport());
+        return sb.toString();
+    }
+
+    private String summaryReport() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Total items produced: ").append(this.getFinalStage().getWarehouse().size());
         return sb.toString();
     }
 
@@ -160,16 +168,18 @@ public class ProductionLine<T extends Item> {
         for (String stageID : stagesIDArray) {
             // Get stage
             AbstractStage<T> stage = this.stages.get(stageID);
+            // calculate work
+            double timeNotWorking = stage.getTotalBlockedTime() + stage.getTotalStarvedTime();
+            double percentWorking = 100 * ((ProductionLine.config.getMaxRunTime() - timeNotWorking) /
+                    ProductionLine.config.getMaxRunTime());
+
             sb.append(String.format(
-                    "%-15s %-15s %.2f %.2f",
+                    "%-15s %-15s %-15s %-15s",
                     stage.getID(),
-                    "brr",
-                    stage.getTotalStarvedTime(),
-                    stage.getTotalBlockedTime())).append(System.lineSeparator());
-
+                    String.format("%.2f", percentWorking),
+                    String.format("%.2f" ,stage.getTotalStarvedTime()),
+                    String.format("%.2f", stage.getTotalBlockedTime()))).append("\n");
         }
-
-
         return sb.toString();
     }
 
