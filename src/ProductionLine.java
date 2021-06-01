@@ -161,12 +161,11 @@ public class ProductionLine<T extends Item> {
             // Get stage
             AbstractStage<T> stage = this.stages.get(stageID);
             sb.append(String.format(
-                    "%-15s %-15s %-15s %-15s",
+                    "%-15s %-15s %.2f %.2f",
                     stage.getID(),
                     "brr",
                     stage.getTotalStarvedTime(),
-                    stage.getTotalBlockedTime()))
-                    .append(System.lineSeparator());
+                    stage.getTotalBlockedTime())).append(System.lineSeparator());
 
         }
 

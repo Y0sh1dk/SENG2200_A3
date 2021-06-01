@@ -1,7 +1,9 @@
 
 public abstract class AbstractStage<T extends Item> {
-    private double totalStarvedTime;
-    private double totalBlockedTime;
+    protected double totalStarvedTime;
+    protected double totalBlockedTime;
+    protected double lastStarvedTime;
+    protected double lastBlockedTime;
     private String ID;
     protected int numProcessed;
     protected boolean isEventAvailable;

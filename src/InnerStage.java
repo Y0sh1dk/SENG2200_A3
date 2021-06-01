@@ -34,7 +34,14 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
         if (this.nextQueue.add(this.currentItem)) {
             this.numProcessed++;
             this.currentItem = null;
+            if (this.state == State.BLOCKED) {
+                this.totalBlockedTime += (ProductionLine.config.getCurrentTime() - this.lastBlockedTime);
+            }
+            this.lastBlockedTime = 0;
             return true;
+        }
+        if (this.state != State.BLOCKED) {
+            this.lastBlockedTime = ProductionLine.config.getCurrentTime();
         }
         return false;
     }
@@ -46,7 +53,19 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
     @Override
     protected boolean getItem() {
         this.currentItem = prevQueue.remove();
-        return this.currentItem != null;
+        // If we got a item
+        if (this.currentItem != null) {
+            if (this.lastStarvedTime != 0) {
+                this.totalStarvedTime += (ProductionLine.config.getCurrentTime() - this.lastStarvedTime);
+            }
+            this.lastStarvedTime = 0;
+            return true;
+        }
+        // didnt get a item
+        if (this.lastStarvedTime == 0) {
+            this.lastStarvedTime = ProductionLine.config.getCurrentTime();
+        }
+        return false;
     }
 
 

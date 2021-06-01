@@ -24,7 +24,14 @@ public class BeginStage<T extends Item> extends AbstractStage<T> {
         if (this.nextQueue.add(this.currentItem)) {
             this.numProcessed++;
             this.currentItem = null;
+            if (this.state == State.BLOCKED) {
+                this.totalBlockedTime += (ProductionLine.config.getCurrentTime() - this.lastBlockedTime);
+            }
+            this.lastBlockedTime = 0;
             return true;
+        }
+        if (this.state != State.BLOCKED) {
+            this.lastBlockedTime = ProductionLine.config.getCurrentTime();
         }
         return false;
     }

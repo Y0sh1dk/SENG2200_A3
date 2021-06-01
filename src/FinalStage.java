@@ -28,9 +28,18 @@ public class FinalStage<T extends Item> extends AbstractStage<T> {
 
     @Override
     protected boolean getItem() {
-        if (this.prevQueue.size() != 0) {
-            this.currentItem = prevQueue.remove();
+        this.currentItem = prevQueue.remove();
+        // If we got a item
+        if (this.currentItem != null) {
+            if (this.lastStarvedTime != 0) {
+                this.totalStarvedTime += (ProductionLine.config.getCurrentTime() - this.lastStarvedTime);
+            }
+            this.lastStarvedTime = 0;
             return true;
+        }
+        // didnt get a item
+        if (this.lastStarvedTime == 0) {
+            this.lastStarvedTime = ProductionLine.config.getCurrentTime();
         }
         return false;
     }
