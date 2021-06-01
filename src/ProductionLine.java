@@ -28,7 +28,6 @@ public class ProductionLine<T extends Item> {
             boolean eventOccurred = true;
             while(eventOccurred) {
                 eventOccurred = false;
-
                 for (AbstractStage<T> s : this.stages.values()) {
                     Double finishTime = s.process();
                     if (finishTime != 0) {
@@ -230,9 +229,14 @@ public class ProductionLine<T extends Item> {
         StringBuilder sb = new StringBuilder();
         sb.append("Storage Queues:\n");
         sb.append("-----------------------------------------\n");
-        sb.append(String.format("%-9s %-22s %-9s", "Store", "AvgTime[t]", "AvgItems\n"));
+        sb.append(String.format("%-12s %-12s %-12s", "Store", "AvgTime[t]", "AvgItems")).append(System.lineSeparator());
         for(Map.Entry<String, Double> entry : averageQueueTimes.entrySet()) {
-            sb.append(String.format("%-9s %-22s %-9s\n", entry.getKey(), entry.getValue(), "brr"));
+            sb.append(String.format(
+                    "%-12s %-12s %-12s\n",
+                    entry.getKey(),
+                    String.format("%.2f", entry.getValue()),
+                    String.format("%.2f", this.storageQueues.get(entry.getKey()).getAverageItems() /
+                            ProductionLine.config.getMaxRunTime())));
         }
 
         return sb.toString();

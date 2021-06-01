@@ -5,10 +5,13 @@ public class StorageQueue<T extends Item> {
     private ArrayList<StorageQueueEvent> events;
     private HashMap<String, ArrayList<StorageQueueEvent>> hashEvents;
     private String ID;
+    private double lastAverageUpdateTime;
+    private double averageItems;
 
 
     public StorageQueue() {
         this.ID = "Not assigned";
+        this.lastAverageUpdateTime = 0;
         this.events = new ArrayList<>();
         this.hashEvents = new HashMap<>();
         this.itemsStored = new LinkedList<>(); // infinite size
@@ -25,10 +28,18 @@ public class StorageQueue<T extends Item> {
         return hashEvents;
     }
 
+    public void updateAverageItems() {
+        this.averageItems += this.size() * (ProductionLine.config.getCurrentTime() - this.lastAverageUpdateTime);
+        this.lastAverageUpdateTime = ProductionLine.config.getCurrentTime();
+    }
+
+
+
     public boolean add(T inItem) {
         boolean isAdded =  this.itemsStored.add(inItem);
         if (isAdded) {
             this.generateEvent(inItem.getUniqueID(), StorageQueueEvent.Type.ADD);
+            updateAverageItems();
         } else {
             this.generateEvent(inItem.getUniqueID(), StorageQueueEvent.Type.ADD_FAILED);
         }
@@ -40,6 +51,7 @@ public class StorageQueue<T extends Item> {
         try {
             T removed = this.itemsStored.remove();
             this.generateEvent(removed.getUniqueID(), StorageQueueEvent.Type.REMOVE);
+            updateAverageItems();
             return removed;
         } catch (NoSuchElementException e) {
             this.generateEvent("", StorageQueueEvent.Type.REMOVE_FAILED);
@@ -67,6 +79,10 @@ public class StorageQueue<T extends Item> {
 
     public int size() {
         return this.itemsStored.size();
+    }
+
+    public double getAverageItems() {
+        return averageItems;
     }
 
     private static class LimitedLinkedList<T> extends LinkedList<T> {
