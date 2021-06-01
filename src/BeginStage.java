@@ -21,8 +21,7 @@ public class BeginStage<T extends Item> extends AbstractStage<T> {
     //TODO(yoshi): refactor
     @Override
     protected boolean pushItem() {
-        boolean temp = this.nextQueue.add(this.currentItem);
-        if (temp) {
+        if (this.nextQueue.add(this.currentItem)) {
             this.numProcessed++;
             this.currentItem = null;
             return true;

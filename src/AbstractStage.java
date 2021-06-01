@@ -1,11 +1,21 @@
 
 public abstract class AbstractStage<T extends Item> {
+    private double totalStarvedTime;
+    private double totalBlockedTime;
     private String ID;
     protected int numProcessed;
     protected boolean isEventAvailable;
     protected T currentItem;
     protected State state;
     protected double multiplier;
+
+    public double getTotalStarvedTime() {
+        return this.totalStarvedTime;
+    }
+
+    public double getTotalBlockedTime() {
+        return this.totalBlockedTime;
+    }
 
     enum State {
         PROCESSING,
@@ -14,6 +24,8 @@ public abstract class AbstractStage<T extends Item> {
     }
 
     private AbstractStage() {
+        this.totalBlockedTime = 0;
+        this.totalStarvedTime = 0;
         this.state = State.STARVED;
         this.isEventAvailable = false;
         this.multiplier = 1;

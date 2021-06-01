@@ -31,8 +31,7 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
     //TODO(yoshi): use a decorator for incrementing??
     @Override
     protected boolean pushItem() {
-        boolean temp = this.nextQueue.add(this.currentItem);
-        if (temp) {
+        if (this.nextQueue.add(this.currentItem)) {
             this.numProcessed++;
             this.currentItem = null;
             return true;

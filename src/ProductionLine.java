@@ -143,23 +143,33 @@ public class ProductionLine<T extends Item> {
         sb.append(this.storageQueuesReport());
         sb.append("\n");
         sb.append(this.prodPathsReport());
-
-        //this.stages.forEach((v, k) -> {
-        //    sb.append(v).append(": ").append(k.numProcessed).append("\n");
-        //});
-        //sb.append("\n\n");
-        //this.storageQueues.forEach((v, k) -> {
-        //    k.getEvents().forEach((storageQueueEvent -> {
-        //        sb.append(storageQueueEvent).append("\n");
-        //    }));
-        //});
         return sb.toString();
     }
 
     private String prodStationsReport() {
         StringBuilder sb = new StringBuilder();
         sb.append("Production Stations:\n");
-        sb.append("--------------------------------------------");
+        sb.append("--------------------------------------------------------\n");
+        sb.append(String.format("%-15s %-15s %-15s %-15s", "Stage:", "Work[%]", "Starve[t]", "Block[t]")).append(System.lineSeparator());
+
+        // Should have used TreeMap to keep alphabetical order :(
+        String[] stagesIDArray = this.stages.keySet().toArray(new String[0]);
+        Arrays.sort(stagesIDArray);
+
+        // For stages in alphabetical order
+        for (String stageID : stagesIDArray) {
+            // Get stage
+            AbstractStage<T> stage = this.stages.get(stageID);
+            sb.append(String.format(
+                    "%-15s %-15s %-15s %-15s",
+                    stage.getID(),
+                    "brr",
+                    stage.getTotalStarvedTime(),
+                    stage.getTotalBlockedTime()))
+                    .append(System.lineSeparator());
+
+        }
+
 
         return sb.toString();
     }
@@ -210,7 +220,7 @@ public class ProductionLine<T extends Item> {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Storage Queues:\n");
-        sb.append("------------------------------\n");
+        sb.append("-----------------------------------------\n");
         sb.append(String.format("%-9s %-22s %-9s", "Store", "AvgTime[t]", "AvgItems\n"));
         for(Map.Entry<String, Double> entry : averageQueueTimes.entrySet()) {
             sb.append(String.format("%-9s %-22s %-9s\n", entry.getKey(), entry.getValue(), "brr"));
@@ -221,7 +231,7 @@ public class ProductionLine<T extends Item> {
 
     private String prodPathsReport() {
         // ONLY CONSIDERS ITEMS THAT HAVE FINISHED PRODUCTION!!!
-        ArrayList<T> finishedItems = getFinalStage().getWarehouse();
+        ArrayList<T> finishedItems = this.getFinalStage().getWarehouse();
 
         HashMap<String, Integer> itemPathCounts = new HashMap<>();
         itemPathCounts.put("S2a -> S4a", 0);
