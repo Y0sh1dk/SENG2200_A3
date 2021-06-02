@@ -19,20 +19,35 @@ public abstract class AbstractStage<T extends Item> {
     protected State state;                      // state of the stage
     protected double multiplier;                // Multiplier (as defined in spec)
 
+    /**
+     * getTotalStarvedTime() method
+     * @return total time stage has been starved for
+     */
     public double getTotalStarvedTime() {
         return this.totalStarvedTime;
     }
 
+    /**
+     * getTotalBlockedTime()
+     * @return total time stage has been blocked for
+     */
     public double getTotalBlockedTime() {
         return this.totalBlockedTime;
     }
 
+    /**
+     * Enumeration to represent state of the stage
+     */
     enum State {
         PROCESSING,
         BLOCKED,
         STARVED,
     }
 
+    /**
+     * Constructor when no args are given
+     * private because should not be able to be instantiated with out the required args
+     */
     private AbstractStage() {
         this.totalBlockedTime = 0;
         this.totalStarvedTime = 0;
@@ -40,16 +55,23 @@ public abstract class AbstractStage<T extends Item> {
         this.multiplier = 1;
     }
 
-
+    /**
+     * Constructor when Id and starting state is given
+     * @param inID ID of the stage
+     * @param inStartingState starting state of the stage
+     */
     public AbstractStage(String inID, AbstractStage.State inStartingState) {
         this();
         this.ID = inID;
         this.state = inStartingState;
     }
 
-    // If got a object, returns its finish time
-    // If pushed a object, returns a -1
-    // if got blocked, returns 0
+    /**
+     * process() method
+     * @return If got a object, returns its finish time
+     * @return If pushed a object, returns a -1
+     * @return If got blocked, returns 0
+     */
     protected Double process() {
         switch(this.state) {
             case STARVED:
@@ -83,28 +105,55 @@ public abstract class AbstractStage<T extends Item> {
         return (double) 0;
     }
 
+    /**
+     * pushItem() method
+     * @return boolean, true if successful, else false
+     */
     protected abstract boolean pushItem();
 
+    /**
+     * getItem() method
+     * @return boolean, true if successful, else false
+     */
     protected abstract boolean getItem();
 
-
+    /**
+     * calProcessingTime() method
+     * @return the processing time of the current item
+     */
     protected double calProcessingTime() {
         return ((ProductionLine.getConfig().getM()*multiplier) +
                 (ProductionLine.getConfig().getN()*multiplier) * (ProductionLine.getRandomInst().nextDouble() - 0.5));
     }
 
+    /**
+     * getState() method
+     * @return the current state of the stage
+     */
     public State getState() {
         return this.state;
     }
 
+    /**
+     * getID() method
+     * @return the ID of the stage
+     */
     public String getID() {
         return this.ID;
     }
 
+    /**
+     * setMultiplier() method
+     * @param inMulti multiplier to set
+     */
     public void setMultiplier(double inMulti) {
         this.multiplier = inMulti;
     }
 
+    /**
+     * toString() method
+     * @return String representation of class
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("AbstractStage{");
