@@ -1,5 +1,14 @@
 import java.util.ArrayList;
 
+/**
+ * FileName: FinalStage.java
+ * Assessment: SENG2200 - A3
+ * Author: Yosiah de Koeyer
+ * Student No: c3329520
+ * <p>
+ * Description:
+ * Class to represent a finishing stage in the production line
+ */
 public class FinalStage<T extends Item> extends AbstractStage<T> {
     private StorageQueue<T> prevQueue;
     private ArrayList<T> warehouse;

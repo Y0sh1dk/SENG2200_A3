@@ -1,5 +1,14 @@
 import java.util.ArrayList;
 
+/**
+ * FileName: Item.java
+ * Assessment: SENG2200 - A3
+ * Author: Yosiah de Koeyer
+ * Student No: c3329520
+ * <p>
+ * Description:
+ * A class to represent an Item being produced in the production line
+ */
 public class Item {
     private String uniqueID;
     private ArrayList<String> itemPath;

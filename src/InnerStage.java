@@ -1,3 +1,12 @@
+/**
+ * FileName: InnerStage.java
+ * Assessment: SENG2200 - A3
+ * Author: Yosiah de Koeyer
+ * Student No: c3329520
+ * <p>
+ * Description:
+ * Class to represent a inner stage in the production line
+ */
 public class InnerStage<T extends Item> extends AbstractStage<T> {
     protected StorageQueue<T> prevQueue;
     protected StorageQueue<T> nextQueue;

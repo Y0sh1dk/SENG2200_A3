@@ -1,3 +1,13 @@
+/**
+ * FileName: BeginStage.java
+ * Assessment: SENG2200 - A3
+ * Author: Yosiah de Koeyer
+ * Student No: c3329520
+ * <p>
+ * Description:
+ * Class to represent a starting stage in the production line
+ */
+
 public class BeginStage<T extends Item> extends AbstractStage<T> {
     private StorageQueue<T> nextQueue;
 

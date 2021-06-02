@@ -1,3 +1,12 @@
+/**
+ * FileName: AbstractStage.java
+ * Assessment: SENG2200 - A3
+ * Author: Yosiah de Koeyer
+ * Student No: c3329520
+ * <p>
+ * Description:
+ * Abstract stage class to represent a stage in the production line
+ */
 
 public abstract class AbstractStage<T extends Item> {
     protected double totalStarvedTime;

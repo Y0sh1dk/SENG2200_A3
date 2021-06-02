@@ -1,6 +1,16 @@
+/**
+ * FileName: Config.java
+ * Assessment: SENG2200 - A3
+ * Author: Yosiah de Koeyer
+ * Student No: c3329520
+ * <p>
+ * Description:
+ * Config class
+ */
+
 public class Config {
     private final static double MAX_RUN_TIME = 10000000; // 7 zeros
-    private final static int NUM_GEN_SEED = 3453;
+    private final static Integer NUM_GEN_SEED = null;
 
     private int M;
     private int N;
@@ -45,7 +55,7 @@ public class Config {
         this.currentTime = inTime;
     }
 
-    public int getNumGenSeed() {
+    public Integer getNumGenSeed() {
         return NUM_GEN_SEED;
     }
 

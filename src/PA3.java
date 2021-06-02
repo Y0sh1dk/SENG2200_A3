@@ -1,4 +1,13 @@
 
+/**
+ * FileName: PA3.java
+ * Assessment: SENG2200 - A3
+ * Author: Yosiah de Koeyer
+ * Student No: c3329520
+ * <p>
+ * Description:
+ * Entrypoint class for PA2
+ */
 public class PA3 {
 
     public static void main(String[] args) {

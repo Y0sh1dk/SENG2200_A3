@@ -1,5 +1,14 @@
 import java.util.*;
 
+/**
+ * FileName: StorageQueue.java
+ * Assessment: SENG2200 - A3
+ * Author: Yosiah de Koeyer
+ * Student No: c3329520
+ * <p>
+ * Description:
+ * Class to represent a storage queue between stages in the production line
+ */
 public class StorageQueue<T extends Item> {
     private Queue<T> itemsStored;
     private ArrayList<StorageQueueEvent> events;

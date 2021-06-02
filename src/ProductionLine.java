@@ -1,5 +1,14 @@
 import java.util.*;
 
+/**
+ * FileName: ProductionLine.java
+ * Assessment: SENG2200 - A3
+ * Author: Yosiah de Koeyer
+ * Student No: c3329520
+ * <p>
+ * Description:
+ * Class to represent a production line, stores stages and the queues between them, run() method starts the DES
+ */
 public class ProductionLine<T extends Item> {
     private String beginStageID;
     private String finalStageID;
@@ -19,7 +28,7 @@ public class ProductionLine<T extends Item> {
     public ProductionLine(Config inConfig) {
         this();
         config = inConfig;
-        randomInst = new Random(config.getNumGenSeed());
+        ProductionLine.randomInst = config.getNumGenSeed() != null ? new Random(config.getNumGenSeed()) : new Random();
         this.generateProductionLine();
     }
 
