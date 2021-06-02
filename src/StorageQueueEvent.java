@@ -1,4 +1,4 @@
-public class StorageQueueEvent extends AbstractEvent{
+public class StorageQueueEvent {
     private String storageQueueID;
     private String itemID;
     private Type type;
@@ -43,10 +43,5 @@ public class StorageQueueEvent extends AbstractEvent{
         sb.append(", time=").append(time);
         sb.append('}');
         return sb.toString();
-    }
-
-    @Override
-    public int compareTo(AbstractEvent abstractEvent) {
-        return 0;
     }
 }
