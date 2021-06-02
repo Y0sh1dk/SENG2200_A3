@@ -9,16 +9,15 @@
  */
 
 public abstract class AbstractStage<T extends Item> {
-    protected double totalStarvedTime;
-    protected double totalBlockedTime;
-    protected double lastStarvedTime;
-    protected double lastBlockedTime;
-    private String ID;
-    protected int numProcessed;
-    protected boolean isEventAvailable;
-    protected T currentItem;
-    protected State state;
-    protected double multiplier;
+    protected double totalStarvedTime;          // Time spent in starved stage
+    protected double totalBlockedTime;          // Time spent in blocked state
+    protected double lastStarvedTime;           // Last time starved (resets to 0 when becomes unstarved)
+    protected double lastBlockedTime;           // Last time blocked (resets to 0 when becomes unblocked)
+    private String ID;                          // ID of stage
+    protected int numProcessed;                 // Number of items processed
+    protected T currentItem;                    // Current item in stage
+    protected State state;                      // state of the stage
+    protected double multiplier;                // Multiplier (as defined in spec)
 
     public double getTotalStarvedTime() {
         return this.totalStarvedTime;
@@ -38,7 +37,6 @@ public abstract class AbstractStage<T extends Item> {
         this.totalBlockedTime = 0;
         this.totalStarvedTime = 0;
         this.state = State.STARVED;
-        this.isEventAvailable = false;
         this.multiplier = 1;
     }
 
@@ -56,14 +54,14 @@ public abstract class AbstractStage<T extends Item> {
         switch(this.state) {
             case STARVED:
                 if (this.getItem()) {
-                    currentItem.setFinishTime(ProductionLine.config.getCurrentTime() + this.calProcessingTime());
+                    currentItem.setFinishTime(ProductionLine.getConfig().getCurrentTime() + this.calProcessingTime());
                     this.state = State.PROCESSING;
                     currentItem.getItemPath().add(this.ID);
                     return currentItem.getFinishTime();
                 }
                 break;
             case PROCESSING:
-                if (ProductionLine.config.getCurrentTime() == this.currentItem.getFinishTime()) {
+                if (ProductionLine.getConfig().getCurrentTime() == this.currentItem.getFinishTime()) {
                     // we are finished
                     if (this.pushItem()) {
                         this.state = State.STARVED;
@@ -91,8 +89,8 @@ public abstract class AbstractStage<T extends Item> {
 
 
     protected double calProcessingTime() {
-        return ((ProductionLine.config.getM()*multiplier) +
-                (ProductionLine.config.getN()*multiplier) * (ProductionLine.getRandomInst().nextDouble() - 0.5));
+        return ((ProductionLine.getConfig().getM()*multiplier) +
+                (ProductionLine.getConfig().getN()*multiplier) * (ProductionLine.getRandomInst().nextDouble() - 0.5));
     }
 
     public State getState() {
@@ -112,7 +110,6 @@ public abstract class AbstractStage<T extends Item> {
         final StringBuilder sb = new StringBuilder("AbstractStage{");
         sb.append("ID='").append(ID).append('\'');
         sb.append(", numProcessed=").append(numProcessed);
-        sb.append(", isEventAvailable=").append(isEventAvailable);
         sb.append(", currentItem=").append(currentItem);
         sb.append(", state=").append(state);
         sb.append(", multiplier=").append(multiplier);

@@ -8,8 +8,8 @@
  * Class to represent a inner stage in the production line
  */
 public class InnerStage<T extends Item> extends AbstractStage<T> {
-    protected StorageQueue<T> prevQueue;
-    protected StorageQueue<T> nextQueue;
+    protected StorageQueue<T> prevQueue;                // Previous queue to get items from
+    protected StorageQueue<T> nextQueue;                // Next queue to push items too
 
     public InnerStage(String inID) {
         super(inID, State.STARVED);
@@ -43,13 +43,13 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
             this.numProcessed++;
             this.currentItem = null;
             if (this.state == State.BLOCKED) {
-                this.totalBlockedTime += (ProductionLine.config.getCurrentTime() - this.lastBlockedTime);
+                this.totalBlockedTime += (ProductionLine.getConfig().getCurrentTime() - this.lastBlockedTime);
             }
             this.lastBlockedTime = 0;
             return true;
         }
         if (this.state != State.BLOCKED) {
-            this.lastBlockedTime = ProductionLine.config.getCurrentTime();
+            this.lastBlockedTime = ProductionLine.getConfig().getCurrentTime();
         }
         return false;
     }
@@ -64,14 +64,14 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
         // If we got a item
         if (this.currentItem != null) {
             if (this.lastStarvedTime != 0) {
-                this.totalStarvedTime += (ProductionLine.config.getCurrentTime() - this.lastStarvedTime);
+                this.totalStarvedTime += (ProductionLine.getConfig().getCurrentTime() - this.lastStarvedTime);
             }
             this.lastStarvedTime = 0;
             return true;
         }
         // didnt get a item
         if (this.lastStarvedTime == 0) {
-            this.lastStarvedTime = ProductionLine.config.getCurrentTime();
+            this.lastStarvedTime = ProductionLine.getConfig().getCurrentTime();
         }
         return false;
     }

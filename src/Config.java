@@ -9,14 +9,12 @@
  */
 
 public class Config {
-    private final static double MAX_RUN_TIME = 10000000; // 7 zeros
-    private final static Integer NUM_GEN_SEED = null;
-
-    private int M;
-    private int N;
-    private int Qmax;
-
-    private double currentTime;
+    private final static double MAX_RUN_TIME = 10000000;    // 7 zeros
+    private final static Integer NUM_GEN_SEED = null;       // Random number generator seed
+    private int M;                                          // Average proceessing time of item in a stage
+    private int N;                                          // Range of processing time in a stage
+    private int Qmax;                                       // Size of storage queues
+    private double currentTime;                             // Current simulation time
 
     public Config() {
         this.currentTime = 0;

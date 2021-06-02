@@ -10,14 +10,13 @@ import java.util.*;
  * Class to represent a production line, stores stages and the queues between them, run() method starts the DES
  */
 public class ProductionLine<T extends Item> {
-    private String beginStageID;
-    private String finalStageID;
-    private final HashMap<String ,AbstractStage<T>> stages;
-    private final HashMap<String ,StorageQueue<T>> storageQueues;
-    private final ArrayList<Double> pendingFinishTimes;
-
-    private static Random randomInst = null;
-    public static Config config;
+    private String beginStageID;                                    // ID of starting stage
+    private String finalStageID;                                    // ID of final stage
+    private final HashMap<String ,AbstractStage<T>> stages;         // Hashmap mapping ID's to stages
+    private final HashMap<String ,StorageQueue<T>> storageQueues;   // Hashmap mapping ID's  to storage queues
+    private final ArrayList<Double> pendingFinishTimes;             // Current finishing times of items in stages
+    private static Random randomInst = null;                        // Instance of `Random` class
+    private static Config config;                                   // Config instance
 
     private ProductionLine() {
         this.stages = new HashMap<>();
@@ -279,6 +278,10 @@ public class ProductionLine<T extends Item> {
             sb.append(entry.getKey()).append(":  ").append(entry.getValue()).append("\n");
         }
         return sb.toString();
+    }
+
+    public static Config getConfig() {
+        return config;
     }
 
     public static Random getRandomInst() {

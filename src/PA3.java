@@ -11,9 +11,9 @@
 public class PA3 {
 
     public static void main(String[] args) {
-        Config config = new Config();
+        Config config = new Config();       // Config if simulation
 
-        if (args.length != 3) { // If wrong amount of args given
+        if (args.length != 3) {             // If wrong amount of args given
             System.out.println("Invalid Arguments, Example: java PA3 1000 1000 7");
             System.exit(1);
         }

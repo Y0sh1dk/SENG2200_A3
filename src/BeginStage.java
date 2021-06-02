@@ -9,7 +9,7 @@
  */
 
 public class BeginStage<T extends Item> extends AbstractStage<T> {
-    private StorageQueue<T> nextQueue;
+    private StorageQueue<T> nextQueue;              // Queue to push items too
 
     public BeginStage(String inID) {
         super(inID, State.STARVED);
@@ -34,13 +34,13 @@ public class BeginStage<T extends Item> extends AbstractStage<T> {
             this.numProcessed++;
             this.currentItem = null;
             if (this.state == State.BLOCKED) {
-                this.totalBlockedTime += (ProductionLine.config.getCurrentTime() - this.lastBlockedTime);
+                this.totalBlockedTime += (ProductionLine.getConfig().getCurrentTime() - this.lastBlockedTime);
             }
             this.lastBlockedTime = 0;
             return true;
         }
         if (this.state != State.BLOCKED) {
-            this.lastBlockedTime = ProductionLine.config.getCurrentTime();
+            this.lastBlockedTime = ProductionLine.getConfig().getCurrentTime();
         }
         return false;
     }

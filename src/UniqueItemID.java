@@ -9,9 +9,8 @@
  */
 
 public class UniqueItemID {
-    private static final UniqueItemID instance = new UniqueItemID();
-
-    private static int nextUniqueID = 0;
+    private static final UniqueItemID instance = new UniqueItemID();    // Instance of itself
+    private static int nextUniqueID = 0;                                // Counter for unique ID's
 
     private UniqueItemID() {
 

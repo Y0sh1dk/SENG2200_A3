@@ -10,8 +10,8 @@ import java.util.ArrayList;
  * Class to represent a finishing stage in the production line
  */
 public class FinalStage<T extends Item> extends AbstractStage<T> {
-    private StorageQueue<T> prevQueue;
-    private ArrayList<T> warehouse;
+    private StorageQueue<T> prevQueue;              // Previous queue to get items from
+    private ArrayList<T> warehouse;                 // Warehouse to push items too
 
     public FinalStage(String inID) {
         super(inID, State.STARVED);
@@ -41,14 +41,14 @@ public class FinalStage<T extends Item> extends AbstractStage<T> {
         // If we got a item
         if (this.currentItem != null) {
             if (this.lastStarvedTime != 0) {
-                this.totalStarvedTime += (ProductionLine.config.getCurrentTime() - this.lastStarvedTime);
+                this.totalStarvedTime += (ProductionLine.getConfig().getCurrentTime() - this.lastStarvedTime);
             }
             this.lastStarvedTime = 0;
             return true;
         }
         // didnt get a item
         if (this.lastStarvedTime == 0) {
-            this.lastStarvedTime = ProductionLine.config.getCurrentTime();
+            this.lastStarvedTime = ProductionLine.getConfig().getCurrentTime();
         }
         return false;
     }

@@ -10,18 +10,16 @@ import java.util.*;
  * Class to represent a storage queue between stages in the production line
  */
 public class StorageQueue<T extends Item> {
-    private Queue<T> itemsStored;
-    private ArrayList<StorageQueueEvent> events;
-    private HashMap<String, ArrayList<StorageQueueEvent>> hashEvents;
-    private String ID;
-    private double lastAverageUpdateTime;
-    private double averageItems;
+    private Queue<T> itemsStored;                                       // Items stored
+    private HashMap<String, ArrayList<StorageQueueEvent>> hashEvents;   // Hashmap of events per Item
+    private String ID;                                                  // ID of stage
+    private double lastAverageUpdateTime;                               // Used to calculate avg items in queue
+    private double averageItems;                                        // Used to calculate avg items in queue
 
 
     public StorageQueue() {
         this.ID = "Not assigned";
         this.lastAverageUpdateTime = 0;
-        this.events = new ArrayList<>();
         this.hashEvents = new HashMap<>();
         this.itemsStored = new LinkedList<>(); // infinite size
     }
@@ -38,8 +36,8 @@ public class StorageQueue<T extends Item> {
     }
 
     public void updateAverageItems() {
-        this.averageItems += this.size() * (ProductionLine.config.getCurrentTime() - this.lastAverageUpdateTime);
-        this.lastAverageUpdateTime = ProductionLine.config.getCurrentTime();
+        this.averageItems += this.size() * (ProductionLine.getConfig().getCurrentTime() - this.lastAverageUpdateTime);
+        this.lastAverageUpdateTime = ProductionLine.getConfig().getCurrentTime();
     }
 
 
@@ -77,7 +75,7 @@ public class StorageQueue<T extends Item> {
         this.hashEvents.get(itemID).add(new StorageQueueEvent(
                 this.ID,
                 itemID,
-                ProductionLine.config.getCurrentTime(),
+                ProductionLine.getConfig().getCurrentTime(),
                 inType)
         );
     }
@@ -115,7 +113,6 @@ public class StorageQueue<T extends Item> {
     public String toString() {
         final StringBuilder sb = new StringBuilder("StorageQueue{");
         sb.append("itemsStored=").append(itemsStored);
-        sb.append(", events=").append(events);
         sb.append(", ID='").append(ID).append('\'');
         sb.append('}');
         return sb.toString();

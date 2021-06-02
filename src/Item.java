@@ -10,11 +10,9 @@ import java.util.ArrayList;
  * A class to represent an Item being produced in the production line
  */
 public class Item {
-    private String uniqueID;
-    private ArrayList<String> itemPath;
-    private State state;
-
-    private Double finishTime;
+    private String uniqueID;                    // ID of item
+    private ArrayList<String> itemPath;         // Stages that the item has passed through
+    private Double finishTime;                  // Time that the item finishes processing (should probs be in stage)
 
     public String getUniqueID() {
         return uniqueID;
@@ -28,16 +26,8 @@ public class Item {
         this.finishTime = finishTime;
     }
 
-
-    enum State{
-        PROCESSING,
-        QUEUED,
-        FINISHED,
-    }
-
     private Item() {                            // needs to have a ID so private
         this.itemPath = new ArrayList<>();
-        this.state = State.QUEUED;             // starts queued
     }
 
     public Item(String inID) {
@@ -49,20 +39,11 @@ public class Item {
         return itemPath;
     }
 
-    public State getState() {
-        return this.state;
-    }
-
-    public void setState(State inState) {
-        this.state = inState;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Item{");
         sb.append("uniqueID='").append(uniqueID).append('\'');
         sb.append(", events=").append(itemPath);
-        sb.append(", state=").append(state);
         sb.append(", finishTime=").append(finishTime);
         sb.append('}');
         return sb.toString();
