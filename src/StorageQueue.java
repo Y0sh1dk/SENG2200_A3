@@ -17,6 +17,9 @@ public class StorageQueue<T extends Item> {
     private double averageItems;                                        // Used to calculate avg items in queue
 
 
+    /**
+     * Constructor when no args are given
+     */
     public StorageQueue() {
         this.ID = "Not assigned";
         this.lastAverageUpdateTime = 0;
@@ -24,24 +27,39 @@ public class StorageQueue<T extends Item> {
         this.itemsStored = new LinkedList<>(); // infinite size
     }
 
-
+    /**
+     * Constructor when Id and max size are given
+     * @param inID ID of storage queue
+     * @param inMaxSize max size of storage queue
+     */
     public StorageQueue(String inID, int inMaxSize) {
         this();
         this.ID = inID;
         this.itemsStored = new LimitedLinkedList<>(inMaxSize); // Limited size
     }
 
+    /**
+     * getEvents()
+     * @return hashmap of events that occurred on this queue
+     */
     public HashMap<String, ArrayList<StorageQueueEvent>> getEvents() {
-        return hashEvents;
+        return this.hashEvents;
     }
 
-    public void updateAverageItems() {
+    /**
+     * updateAverageItems() method
+     * Use for calculations of average items in queue
+     */
+    private void updateAverageItems() {
         this.averageItems += this.size() * (ProductionLine.getConfig().getCurrentTime() - this.lastAverageUpdateTime);
         this.lastAverageUpdateTime = ProductionLine.getConfig().getCurrentTime();
     }
 
-
-
+    /**
+     * add() method
+     * @param inItem Item to add to queue
+     * @return boolean, true if successful, else false
+     */
     public boolean add(T inItem) {
         boolean isAdded =  this.itemsStored.add(inItem);
         if (isAdded) {
@@ -53,7 +71,10 @@ public class StorageQueue<T extends Item> {
         return isAdded;
     }
 
-    // Returns null if no such item
+    /**
+     * remove() method
+     * @return Item at head of queue if available, else null
+     */
     public T remove() {
         try {
             T removed = this.itemsStored.remove();
@@ -66,7 +87,11 @@ public class StorageQueue<T extends Item> {
         }
     }
 
-
+    /**
+     * generateEvent() method
+     * @param itemID Item ID for event
+     * @param inType type of event
+     */
     private void generateEvent(String itemID, StorageQueueEvent.Type inType) {
         // If new item, create arrayList for it
         if (!this.hashEvents.containsKey(itemID)) {
@@ -80,18 +105,35 @@ public class StorageQueue<T extends Item> {
         );
     }
 
+    /**
+     * getID() method
+     * @return the ID of the queue
+     */
     public String getID() {
         return ID;
     }
 
+    /**
+     * size() method
+     * @return the size of the queue
+     */
     public int size() {
         return this.itemsStored.size();
     }
 
+    /**
+     * getAverageItems() method
+     * @return avg items in the queue
+     */
     public double getAverageItems() {
-        return averageItems;
+        return this.averageItems;
     }
 
+    /**
+     * LimitedLinkedList Class
+     * Same as LinkedList, but has a fixed size
+     * @param <T> Objects it stores
+     */
     private static class LimitedLinkedList<T> extends LinkedList<T> {
         private final int limit;
 
@@ -109,6 +151,10 @@ public class StorageQueue<T extends Item> {
         }
     }
 
+    /**
+     * toString() method
+     * @return String representation of class
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("StorageQueue{");

@@ -17,18 +17,34 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
         this.nextQueue = new StorageQueue<>();
     }
 
+    /**
+     * setPrevQueue() method
+     * @param inQueue queue to set as previous queue
+     */
     public void setPrevQueue(StorageQueue<T> inQueue) {
         this.prevQueue = inQueue;
     }
 
+    /**
+     * setNextQueue() method
+     * @param inQueue queue to set as next queue
+     */
     public void setNextQueue(StorageQueue<T> inQueue) {
         this.nextQueue = inQueue;
     }
 
+    /**
+     * getPrevQueue() method
+     * @return the previous queue
+     */
     public StorageQueue<T> getPrevQueue() {
         return this.prevQueue;
     }
 
+    /**
+     * getNextQueue() method
+     * @return the next queue
+     */
     public StorageQueue<T> getNextQueue() {
         return this.nextQueue;
     }
@@ -76,6 +92,10 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
         return false;
     }
 
+    /**
+     * toString() method
+     * @return String representation of class
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("InnerStage{");

@@ -16,10 +16,18 @@ public class Config {
     private int Qmax;                                       // Size of storage queues
     private double currentTime;                             // Current simulation time
 
+    /**
+     * Constructor when no args are given
+     */
     public Config() {
         this.currentTime = 0;
     }
 
+    /**
+     * parseArgs() method
+     * @param args String array of args read from entrypoint method
+     * @throws Exception if cannot parse args
+     */
     public void parseArgs(String[] args) throws Exception {
         try {
             this.M = Integer.parseInt(args[0]);
@@ -31,35 +39,66 @@ public class Config {
         }
     }
 
+    /**
+     * getM()
+     * @return returns average processing time of a item
+     */
     public int getM() {
         return M;
     }
 
+    /**
+     * getN() method
+     * @return returns the range of prcessing time in a stage
+     */
     public int getN() {
         return N;
     }
 
+    /**
+     * getQmax() method
+     * @return returns the max size that storage queues are allowed
+     */
     public int getQmax() {
         return Qmax;
     }
 
-
+    /**
+     * getCurrentTime() method
+     * @return the current time of the simulation
+     */
     public double getCurrentTime() {
         return currentTime;
     }
 
+    /**
+     * setCurrentTime() method
+     * @param inTime double to sest as current time
+     */
     public void setCurrentTime(double inTime) {
         this.currentTime = inTime;
     }
 
+    /**
+     * getNumGenSeed() method
+     * @return seed for the random number generator
+     */
     public Integer getNumGenSeed() {
         return NUM_GEN_SEED;
     }
 
+    /**
+     * getMaxRunTime() method
+     * @return the max runtime of the simulation
+     */
     public double getMaxRunTime() {
         return MAX_RUN_TIME;
     }
 
+    /**
+     * toString() method
+     * @return String representation of class
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Config{");

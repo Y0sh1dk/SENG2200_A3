@@ -14,6 +14,9 @@ public class StorageQueueEvent {
     private Type type;                  // Type of event
     private double time;                // Time event occured
 
+    /**
+     * Enumeration to represent the type of event
+     */
     enum Type {
         ADD,
         REMOVE,
@@ -21,6 +24,13 @@ public class StorageQueueEvent {
         REMOVE_FAILED,
     }
 
+    /**
+     * Constructor when queue ID, item ID, time and type of event is given
+     * @param inStorageQueueID
+     * @param inItemID
+     * @param inTime
+     * @param inType
+     */
     public StorageQueueEvent(String inStorageQueueID, String inItemID, Double inTime, Type inType) {
         this.storageQueueID = inStorageQueueID;
         this.itemID = inItemID;
@@ -28,22 +38,42 @@ public class StorageQueueEvent {
         this.type = inType;
     }
 
+    /**
+     * getID() method
+     * @return ID of the queue event occurred in
+     */
     public String getID() {
         return this.storageQueueID;
     }
 
+    /**
+     * getItemID() method
+     * @return ID of the item the event belongs too
+     */
     public String getItemID() {
         return this.itemID;
     }
 
+    /**
+     * getType() method
+     * @return the type of event
+     */
     public Type getType() {
         return this.type;
     }
 
+    /**
+     * getTime() method
+     * @return the time the event occurred
+     */
     public double getTime() {
         return time;
     }
 
+    /**
+     * toString() method
+     * @return String representation of class
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("StorageQueueEvent{");

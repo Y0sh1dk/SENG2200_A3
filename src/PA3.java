@@ -10,6 +10,10 @@
  */
 public class PA3 {
 
+    /**
+     * Entrypoint method for PA3
+     * @param args command line args
+     */
     public static void main(String[] args) {
         Config config = new Config();       // Config if simulation
 
@@ -18,6 +22,7 @@ public class PA3 {
             System.exit(1);
         }
 
+        // Try to parse args
         try {
             config.parseArgs(args);
         } catch (Exception e) {
@@ -28,6 +33,10 @@ public class PA3 {
         PA3.run(config);
     }
 
+    /**
+     * run() method
+     * @param config config for production line
+     */
     private void run(Config config) {
         ProductionLine<Item> pl = new ProductionLine<>(config);
         pl.run();

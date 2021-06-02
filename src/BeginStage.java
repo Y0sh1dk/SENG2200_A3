@@ -11,15 +11,27 @@
 public class BeginStage<T extends Item> extends AbstractStage<T> {
     private StorageQueue<T> nextQueue;              // Queue to push items too
 
+    /**
+     * Constructor
+     * @param inID ID of stage
+     */
     public BeginStage(String inID) {
         super(inID, State.STARVED);
         this.nextQueue = new StorageQueue<>();
     }
 
+    /**
+     * setNextQueue() method
+     * @param inQueue StorageQueue to set as nextQueues
+     */
     public void setNextQueue(StorageQueue<T> inQueue) {
         this.nextQueue = inQueue;
     }
 
+    /**
+     * getNextQueue() method
+     * @return the next queue
+     */
     public StorageQueue<T> getNextQueue() {
         return this.nextQueue;
     }
@@ -59,6 +71,10 @@ public class BeginStage<T extends Item> extends AbstractStage<T> {
         return true;
     }
 
+    /**
+     * toString() method
+     * @return String representation of class
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("BeginStage{");

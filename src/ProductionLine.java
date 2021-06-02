@@ -18,12 +18,20 @@ public class ProductionLine<T extends Item> {
     private static Random randomInst = null;                        // Instance of `Random` class
     private static Config config;                                   // Config instance
 
+    /**
+     * Constructor when no args are given, private because a ProductionLine instance should not
+     * be able to be created without being passed a config
+     */
     private ProductionLine() {
         this.stages = new HashMap<>();
         this.storageQueues = new HashMap<>();
         this.pendingFinishTimes = new ArrayList<>();
     }
 
+    /**
+     * Constructor when Config is given
+     * @param inConfig
+     */
     public ProductionLine(Config inConfig) {
         this();
         config = inConfig;
@@ -31,6 +39,10 @@ public class ProductionLine<T extends Item> {
         this.generateProductionLine();
     }
 
+    /**
+     * run() method
+     * Runs the DES until max time is reached
+     */
     public void run() {
         while(config.getCurrentTime() < config.getMaxRunTime()) {
             boolean eventOccurred = true;
@@ -50,10 +62,18 @@ public class ProductionLine<T extends Item> {
         }
     }
 
+    /**
+     * clearFinishedTimes() method
+     * Moves time events out of queue if they have been completed
+     */
     private void clearFinishedTimes() {
         this.pendingFinishTimes.removeIf((aDouble) -> aDouble <= config.getCurrentTime());
     }
 
+    /**
+     * generateProductionLine()
+     * Generates the production line as specified in the spec
+     */
     public void generateProductionLine() {
         String[] stageNames = {"S0", "S1", "S2a", "S2b", "S3", "S4a", "S4b", "S5"};
 
@@ -121,24 +141,45 @@ public class ProductionLine<T extends Item> {
         this.getFinalStage().setPrevQueue(genStorageQueue("Q45"));
     }
 
-
+    /**
+     * getBeginStage() method
+     * @return the beginning stage of the production line
+     */
     private BeginStage<T> getBeginStage() {
         return (BeginStage<T>) this.stages.get(this.beginStageID);
     }
 
+    /**
+     * getInnerStage() method
+     * @param inStageID ID of stage to get
+     * @return The inner stage with the given ID
+     */
     private InnerStage<T> getInnerStage(String inStageID) {
         return (InnerStage<T>) this.stages.get(inStageID);
     }
 
+    /**
+     * getFinalStage() method
+     * @return the final stage of the production line
+     */
     private FinalStage<T> getFinalStage() {
         return (FinalStage<T>) this.stages.get(this.finalStageID);
     }
 
+    /**
+     * genStorageQueue
+     * @param inQueueID ID of queue to make
+     * @return instance of the queue
+     */
     private StorageQueue<T> genStorageQueue(String inQueueID) {
         this.storageQueues.putIfAbsent(inQueueID, new StorageQueue<>(inQueueID, config.getQmax()));
         return this.storageQueues.get(inQueueID);
     }
 
+    /**
+     * report() method
+     * @return String representation of the production line report
+     */
     public String report() {
         StringBuilder sb = new StringBuilder();
         sb.append(config);
@@ -146,7 +187,7 @@ public class ProductionLine<T extends Item> {
         sb.append("\n");
         sb.append(this.summaryReport());
         sb.append("\n");
-        sb.append(this.prodStationsReport());
+        sb.append(this.prodStagesReport());
         sb.append("\n");
         sb.append(this.storageQueuesReport());
         sb.append("\n");
@@ -154,13 +195,23 @@ public class ProductionLine<T extends Item> {
         return sb.toString();
     }
 
+    /**
+     * summaryReport()
+     * Initial summary of the production line
+     * @return String summary
+     */
     private String summaryReport() {
         StringBuilder sb = new StringBuilder();
         sb.append("Total items produced: ").append(this.getFinalStage().getWarehouse().size());
         return sb.toString();
     }
 
-    private String prodStationsReport() {
+    /**
+     * prodStagesReport()
+     * Calculates work%, starve time and block time for all stages
+     * @return String summary of stages
+     */
+    private String prodStagesReport() {
         StringBuilder sb = new StringBuilder();
         sb.append("Production Stations:\n");
         sb.append("--------------------------------------------------------\n");
@@ -189,6 +240,11 @@ public class ProductionLine<T extends Item> {
         return sb.toString();
     }
 
+    /**
+     * storageQueuesReport() method
+     * Calculates Average time of items in queue and average items for each queue
+     * @return String summary of queues
+     */
     private String storageQueuesReport() {
 
         HashMap<String, Double> averageQueueTimes = new HashMap<>();
@@ -249,6 +305,11 @@ public class ProductionLine<T extends Item> {
         return sb.toString();
     }
 
+    /**
+     * prodPathsReport()
+     * Calculates the number of itesm that took each possible path
+     * @return String summary of possible paths items can take
+     */
     private String prodPathsReport() {
         // ONLY CONSIDERS ITEMS THAT HAVE FINISHED PRODUCTION!!!
         ArrayList<T> finishedItems = this.getFinalStage().getWarehouse();
@@ -288,6 +349,10 @@ public class ProductionLine<T extends Item> {
         return randomInst;
     }
 
+    /**
+     * toString() method
+     * @return String representation of class
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("ProductionLine{");
