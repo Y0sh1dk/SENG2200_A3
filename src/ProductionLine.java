@@ -229,7 +229,7 @@ public class ProductionLine<T extends Item> {
         StringBuilder sb = new StringBuilder();
         sb.append("Storage Queues:\n");
         sb.append("-----------------------------------------\n");
-        sb.append(String.format("%-12s %-12s %-12s", "Store", "AvgTime[t]", "AvgItems")).append(System.lineSeparator());
+        sb.append(String.format("%-12s %-12s %-12s", "Store:", "AvgTime[t]", "AvgItems")).append(System.lineSeparator());
         for(Map.Entry<String, Double> entry : averageQueueTimes.entrySet()) {
             sb.append(String.format(
                     "%-12s %-12s %-12s\n",
