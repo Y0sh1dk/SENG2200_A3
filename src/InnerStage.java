@@ -76,5 +76,12 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
         return false;
     }
 
-
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("InnerStage{");
+        sb.append("prevQueue=").append(prevQueue);
+        sb.append(", nextQueue=").append(nextQueue);
+        sb.append('}');
+        return sb.toString();
+    }
 }

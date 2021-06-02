@@ -43,7 +43,7 @@ public class Item {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Item{");
         sb.append("uniqueID='").append(uniqueID).append('\'');
-        sb.append(", events=").append(itemPath);
+        sb.append(", itemPath=").append(itemPath);
         sb.append(", finishTime=").append(finishTime);
         sb.append('}');
         return sb.toString();

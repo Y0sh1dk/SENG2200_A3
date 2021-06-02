@@ -32,6 +32,5 @@ public class PA3 {
         ProductionLine<Item> pl = new ProductionLine<>(config);
         pl.run();
         System.out.println(pl.report());
-
     }
 }

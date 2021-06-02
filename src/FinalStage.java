@@ -60,4 +60,13 @@ public class FinalStage<T extends Item> extends AbstractStage<T> {
         this.currentItem = null;
         return true;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("FinalStage{");
+        sb.append("prevQueue=").append(prevQueue);
+        sb.append(", warehouse=").append(warehouse);
+        sb.append('}');
+        return sb.toString();
+    }
 }

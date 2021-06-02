@@ -113,7 +113,10 @@ public class StorageQueue<T extends Item> {
     public String toString() {
         final StringBuilder sb = new StringBuilder("StorageQueue{");
         sb.append("itemsStored=").append(itemsStored);
+        sb.append(", hashEvents=").append(hashEvents);
         sb.append(", ID='").append(ID).append('\'');
+        sb.append(", lastAverageUpdateTime=").append(lastAverageUpdateTime);
+        sb.append(", averageItems=").append(averageItems);
         sb.append('}');
         return sb.toString();
     }

@@ -58,4 +58,12 @@ public class BeginStage<T extends Item> extends AbstractStage<T> {
         this.currentItem = (T) new Item((UniqueItemID.getID()));
         return true;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("BeginStage{");
+        sb.append("nextQueue=").append(nextQueue);
+        sb.append('}');
+        return sb.toString();
+    }
 }

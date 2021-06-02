@@ -287,4 +287,16 @@ public class ProductionLine<T extends Item> {
     public static Random getRandomInst() {
         return randomInst;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ProductionLine{");
+        sb.append("beginStageID='").append(beginStageID).append('\'');
+        sb.append(", finalStageID='").append(finalStageID).append('\'');
+        sb.append(", stages=").append(stages);
+        sb.append(", storageQueues=").append(storageQueues);
+        sb.append(", pendingFinishTimes=").append(pendingFinishTimes);
+        sb.append('}');
+        return sb.toString();
+    }
 }
