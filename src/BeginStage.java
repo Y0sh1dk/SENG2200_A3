@@ -28,7 +28,6 @@ public class BeginStage<T extends Item> extends AbstractStage<T> {
     /**
      * Push item into next queue
      */
-    //TODO(yoshi): refactor
     @Override
     protected boolean pushItem() {
         if (this.nextQueue.add(this.currentItem)) {
@@ -47,8 +46,11 @@ public class BeginStage<T extends Item> extends AbstractStage<T> {
     }
 
     /**
-     * TODO(yoshi): document this!!!!!!!!!!!!!!!
-     * @return
+     * getItem() method
+     * Only way to generate `T` instances within `BeginStage` is to do a unchecked cast to `T`,
+     * java dont like unchecked casts and wont compile so the warning is suppressed :)
+     * Me > Compiler
+     * @return boolean true if got a item, false if not (always true because beginning stage)
      */
     @Override
     @SuppressWarnings("unchecked")

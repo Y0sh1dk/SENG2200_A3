@@ -28,7 +28,6 @@ public class Config {
             this.N = Integer.parseInt(args[1]);
             this.Qmax = Integer.parseInt(args[2]);
         } catch (Exception e) {
-            // TODO(yoshi): Custom exception
             System.err.println(e);
             throw new Exception("Error reading args");
         }

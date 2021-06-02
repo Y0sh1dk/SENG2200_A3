@@ -15,13 +15,13 @@ public class PA3 {
 
         if (args.length != 3) { // If wrong amount of args given
             System.out.println("Invalid Arguments, Example: java PA3 1000 1000 7");
-            System.exit(1); // TODO(yoshi) : what code?
+            System.exit(1);
         }
 
         try {
             config.parseArgs(args);
         } catch (Exception e) {
-            System.exit(1); // TODO(yoshi): what code?
+            System.exit(1);
         }
 
         PA3 PA3 = new PA3();

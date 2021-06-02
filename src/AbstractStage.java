@@ -50,7 +50,7 @@ public abstract class AbstractStage<T extends Item> {
     }
 
     // If got a object, returns its finish time
-    // If pushed a object, returns a -1 TODO(yoshi) make this a static class attribute
+    // If pushed a object, returns a -1
     // if got blocked, returns 0
     protected Double process() {
         switch(this.state) {

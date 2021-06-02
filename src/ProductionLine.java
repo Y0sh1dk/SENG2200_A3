@@ -140,7 +140,6 @@ public class ProductionLine<T extends Item> {
         return this.storageQueues.get(inQueueID);
     }
 
-    // TODO(yoshi): this
     public String report() {
         StringBuilder sb = new StringBuilder();
         sb.append(config);
