@@ -44,12 +44,16 @@ public class ProductionLine<T extends Item> {
      * Runs the DES until max time is reached
      */
     public void run() {
+        // Till hit max time
         while(config.getCurrentTime() < config.getMaxRunTime()) {
             boolean eventOccurred = true;
             while(eventOccurred) {
                 eventOccurred = false;
+                // All stages
                 for (AbstractStage<T> s : this.stages.values()) {
+                    // Process item
                     Double finishTime = s.process();
+                    // If didnt get blocked
                     if (finishTime != 0) {
                         eventOccurred = true;
                         this.pendingFinishTimes.add(finishTime);
@@ -57,7 +61,9 @@ public class ProductionLine<T extends Item> {
                 }
             }
             this.clearFinishedTimes();
+            // Should have just just used a priority queue lol
             Collections.sort(this.pendingFinishTimes);
+            // Increment time to the time the next even occurs
             config.setCurrentTime(pendingFinishTimes.get(0));
         }
     }

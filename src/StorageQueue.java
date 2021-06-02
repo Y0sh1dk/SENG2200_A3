@@ -76,12 +76,15 @@ public class StorageQueue<T extends Item> {
      * @return Item at head of queue if available, else null
      */
     public T remove() {
+        // Try to remove a item
         try {
             T removed = this.itemsStored.remove();
             this.generateEvent(removed.getUniqueID(), StorageQueueEvent.Type.REMOVE);
             updateAverageItems();
             return removed;
-        } catch (NoSuchElementException e) {
+        }
+        // No items to remove
+        catch (NoSuchElementException e) {
             this.generateEvent("", StorageQueueEvent.Type.REMOVE_FAILED);
             return null;
         }
@@ -93,10 +96,11 @@ public class StorageQueue<T extends Item> {
      * @param inType type of event
      */
     private void generateEvent(String itemID, StorageQueueEvent.Type inType) {
-        // If new item, create arrayList for it
+        // If new item, create ArrayList for it
         if (!this.hashEvents.containsKey(itemID)) {
             this.hashEvents.put(itemID, new ArrayList<>());
         }
+        // add event to ArrayList for that item
         this.hashEvents.get(itemID).add(new StorageQueueEvent(
                 this.ID,
                 itemID,

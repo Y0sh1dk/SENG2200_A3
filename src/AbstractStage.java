@@ -122,8 +122,8 @@ public abstract class AbstractStage<T extends Item> {
      * @return the processing time of the current item
      */
     protected double calProcessingTime() {
-        return ((ProductionLine.getConfig().getM()*multiplier) +
-                (ProductionLine.getConfig().getN()*multiplier) * (ProductionLine.getRandomInst().nextDouble() - 0.5));
+        return ((ProductionLine.getConfig().getM() * multiplier) +
+                (ProductionLine.getConfig().getN() * multiplier) * (ProductionLine.getRandomInst().nextDouble() - 0.5));
     }
 
     /**

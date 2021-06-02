@@ -42,6 +42,7 @@ public class BeginStage<T extends Item> extends AbstractStage<T> {
      */
     @Override
     protected boolean pushItem() {
+        // Try to push a item
         if (this.nextQueue.add(this.currentItem)) {
             this.numProcessed++;
             this.currentItem = null;

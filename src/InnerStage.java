@@ -55,6 +55,7 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
      */
     @Override
     protected boolean pushItem() {
+        // If successfully pushed
         if (this.nextQueue.add(this.currentItem)) {
             this.numProcessed++;
             this.currentItem = null;
@@ -64,6 +65,7 @@ public class InnerStage<T extends Item> extends AbstractStage<T> {
             this.lastBlockedTime = 0;
             return true;
         }
+        // Not successful
         if (this.state != State.BLOCKED) {
             this.lastBlockedTime = ProductionLine.getConfig().getCurrentTime();
         }
