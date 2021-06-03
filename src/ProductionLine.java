@@ -35,6 +35,7 @@ public class ProductionLine<T extends Item> {
     public ProductionLine(Config inConfig) {
         this();
         config = inConfig;
+        // Use seed if there is one in config, else no seed
         ProductionLine.randomInst = config.getNumGenSeed() != null ? new Random(config.getNumGenSeed()) : new Random();
         this.generateProductionLine();
     }
